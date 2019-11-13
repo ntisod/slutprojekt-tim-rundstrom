@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{501BD3FF-7F48-2366-810A-1677FF50E37F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{6C098988-6B17-8BC8-260E-9EECADD29771}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess", "Chess\Chess.csproj", "{7A683483-E5F5-4B57-AB40-BC318FB51A7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,16 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{501BD3FF-7F48-2366-810A-1677FF50E37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{501BD3FF-7F48-2366-810A-1677FF50E37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{501BD3FF-7F48-2366-810A-1677FF50E37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{501BD3FF-7F48-2366-810A-1677FF50E37F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C098988-6B17-8BC8-260E-9EECADD29771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C098988-6B17-8BC8-260E-9EECADD29771}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C098988-6B17-8BC8-260E-9EECADD29771}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C098988-6B17-8BC8-260E-9EECADD29771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A683483-E5F5-4B57-AB40-BC318FB51A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A683483-E5F5-4B57-AB40-BC318FB51A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A683483-E5F5-4B57-AB40-BC318FB51A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A683483-E5F5-4B57-AB40-BC318FB51A7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD2BA971-B7D4-4AAD-8296-2ACAD8A169F8}
 	EndGlobalSection
 EndGlobal
