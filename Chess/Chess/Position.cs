@@ -11,11 +11,13 @@ namespace Chess {
 		int columnInt;
 		int row;
 		string name;
+		string btnName;
 
 		public string Column { get => column; }
 		public int ColumnInt { get => columnInt; }
 		public int Row { get => row; }
 		public string Name { get => name; }
+		public string BtnName { get => btnName; }
 
 		public Position(int columnInt, int row)
 		{
@@ -23,6 +25,7 @@ namespace Chess {
 			this.row = row;
 			column = ((char)(64 + columnInt)).ToString();
 			name = $"{column}{row}";
+			btnName = $"Btn{name}";
 		}
 
 		public static bool operator ==(Position pos1, Position pos2)

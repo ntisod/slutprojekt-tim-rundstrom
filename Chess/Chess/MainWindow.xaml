@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Chess"
         mc:Ignorable="d"
-        Title="Chess" Height="800" Width="800">
+        Title="Chess" Height="600" Width="600">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -66,37 +66,36 @@
     <Grid x:Name="grid" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="75" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="50" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         
         
-        <TextBlock x:Name="whitePoints" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" />
-        <TextBlock x:Name="blackPoints" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="3" />
-
-
-
+        <TextBlock x:Name="whitePoints" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" />
+        <TextBlock x:Name="blackPoints" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="3" />
+        <Button x:Name="BtnReset" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Content="Reset" FontSize="20" Background="White" BorderBrush="Black" Click="Btn_Reset_Click" Margin="10" Padding="0, -5, 0, 0" />
+        <TextBlock x:Name="GameOverTxt" FontSize="30" VerticalAlignment="Center" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="4" Grid.RowSpan="2" TextAlignment="Center" />
 
     </Grid>
 

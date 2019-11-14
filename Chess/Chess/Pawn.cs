@@ -17,16 +17,17 @@ namespace Chess {
 		public override List<Position> GetMoves(List<Chesspiece> teamPieces) {
 			List<Position> moves = new List<Position>();
 
-			moves.Add(new Position(position.ColumnInt, position.Row + 1));
+			int c = IsWhite ? 1 : -1;
+			moves.Add(new Position(Pos.ColumnInt, Pos.Row + 1 * c));
 			if (untouched)
-				moves.Add(new Position(position.ColumnInt, position.Row + 2));
+				moves.Add(new Position(Pos.ColumnInt, Pos.Row + 2 * c));
 
 			foreach (Chesspiece p in teamPieces) {
 				if (untouched) {
-					if (p.position == moves[1])
+					if (p.Pos == moves[1])
 						moves.RemoveAt(1);
 				}
-				if (p.position == moves[0])
+				if (p.Pos == moves[0])
 					moves.Clear();
 			}
 

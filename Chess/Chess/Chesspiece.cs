@@ -8,21 +8,26 @@ using System.Threading.Tasks;
 namespace Chess {
 	abstract class Chesspiece {
 
-		public string piece;
-		public Position position;
-		public bool isWhite;
-		public int value;
+		string icon;
+		Position pos;
+		bool isWhite;
+		int value;
 
-		public Chesspiece(string piece, Position position, bool isWhite, int value) {
-			this.piece = piece;
-			this.position = position;
+		public string Icon { get => icon; }
+		public Position Pos { get => pos; }
+		public bool IsWhite { get => isWhite; }
+		public int Value { get => value; }
+
+		public Chesspiece(string icon, Position pos, bool isWhite, int value) {
+			this.icon = icon;
+			this.pos = pos;
 			this.isWhite = isWhite;
 			this.value = value;
 		}
 		public abstract List<Position> GetMoves(List<Chesspiece> teamPieces);
 
 		public virtual void MovePiece(Position position) {
-			this.position = position;
+			pos = position;
 		}
 
 	}

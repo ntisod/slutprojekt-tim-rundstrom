@@ -12,7 +12,7 @@ namespace Chess {
 		public List<Chesspiece> pieces;
 		public int points;
 		bool isWhite;
-		bool hasLost;
+		public bool hasLost;
 
 		public Player(bool isWhite) {
 			pieces = new List<Chesspiece>();
@@ -20,8 +20,6 @@ namespace Chess {
 			points = 0;
 			hasLost = false;
 		}
-
 		
-
 	}
 }

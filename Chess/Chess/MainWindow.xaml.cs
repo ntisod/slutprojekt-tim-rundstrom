@@ -30,7 +30,21 @@ namespace Chess {
 
 		void Start() {
 			board = new Chessboard();
-		
+			SetButtonEvents();
+
+			// Add all buttons to grid
+			foreach(Button b in board.buttons) {
+				b.Style = FindResource("ChessCell") as Style;
+				grid.Children.Add(b);
+			}
+
+			whitePoints.Text = $"White points: {board.whitePlayer.points}";
+			blackPoints.Text = $"Black points: {board.blackPlayer.points}";
+
+			board.Update();
+		}
+
+		void SetButtonEvents() {
 			board.buttons[0, 0].Click += new RoutedEventHandler(Btn_A8_Click);
 			board.buttons[1, 0].Click += new RoutedEventHandler(Btn_A7_Click);
 			board.buttons[2, 0].Click += new RoutedEventHandler(Btn_A6_Click);
@@ -102,41 +116,36 @@ namespace Chess {
 			board.buttons[5, 7].Click += new RoutedEventHandler(Btn_H3_Click);
 			board.buttons[6, 7].Click += new RoutedEventHandler(Btn_H2_Click);
 			board.buttons[7, 7].Click += new RoutedEventHandler(Btn_H1_Click);
-
-			foreach(Button b in board.buttons) {
-				b.Style = this.FindResource("ChessCell") as Style;
-				this.grid.Children.Add(b);
-			}
-
-			whitePoints.Text = $"White points: {board.whitePlayer.points}";
-			blackPoints.Text = $"Black points: {board.blackPlayer.points}";
-
-			board.whitePlayer.pieces.Add(new Pawn(new Position(1, 1), true));
-
-			board.Update();
 		}
 
+		public void SetVictor(string message) {
+			foreach (Button b in board.buttons)
+				grid.Children.Remove(b);
+			GameOverTxt.Text = message;
+			board.state = State.GameOver;
+		}
+
+		private void Btn_Reset_Click(object sender, RoutedEventArgs e) {
+
+			MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure?", "Restart Game", MessageBoxButton.YesNo);
+			if (messageBoxResult == MessageBoxResult.Yes) {
+				SetVictor("");
+				Start();
+			}
+
+		}
 
 		void ButtonPress(Position position) {
 
-			if (board.selectedButton == null) {
-				if (board.state == State.White) {
-					if (board.Occupation(position, true))
-						board.Select(position);
-				} else if (board.state == State.Black) {
-					if (board.Occupation(position, false))
-						board.Select(position);
-				}
-			} else {
-				if (board.selectedButton.Name == $"Btn_{position.Name}")
-					board.Unselect();
-				else
-					board.MoveTo(position);
-			}
-
+			
 
 			whitePoints.Text = $"White points: {board.whitePlayer.points}";
 			blackPoints.Text = $"Black points: {board.blackPlayer.points}";
+
+			if (board.whitePlayer.hasLost)
+				SetVictor("Blacks Won!");
+			else if (board.blackPlayer.hasLost)
+				SetVictor("Whites Won!");
 
 			board.Update();
 		}
@@ -280,10 +289,10 @@ namespace Chess {
 			ButtonPress(new Position(6, 6));
 		}
 		private void Btn_F7_Click(object sender, RoutedEventArgs e) {
-			ButtonPress(new Position(7, 7));
+			ButtonPress(new Position(6, 7));
 		}
 		private void Btn_F8_Click(object sender, RoutedEventArgs e) {
-			ButtonPress(new Position(7, 8));
+			ButtonPress(new Position(6, 8));
 		}
 		private void Btn_G1_Click(object sender, RoutedEventArgs e) {
 			ButtonPress(new Position(7, 1));

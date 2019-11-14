@@ -11,11 +11,16 @@ namespace Chess {
 	class Chessboard {
 
 		public Button[,] buttons;
+		List<Chesspiece> pieces;
 		public Player whitePlayer;
 		public Player blackPlayer;
 		public Button selectedButton;
-		public List<Position> blueButtons;
+		List<Position> blueButtons;
 		public State state;
+
+		Brush blackBrush;
+		Brush blueBrush;
+		Brush greenBrush;
 
 		public Chessboard() {
 			buttons = new Button[8, 8];
@@ -30,10 +35,10 @@ namespace Chess {
 				for(int j = 0; j < 8; j++) {
 					Position pos = new Position(j + 1, 8 - i);
 					Button btn = new Button();
-					btn.Name = $"Btn_{pos.Column}{pos.Row}";
+					btn.Name = pos.BtnName;
 					Grid.SetColumn(btn, j + 1);
 					Grid.SetRow(btn, i + 2);
-					btn.FontSize = 50;
+					btn.FontSize = 10;
 					if (white) {
 						btn.Background = new SolidColorBrush(Colors.White);
 						white = false;
@@ -42,103 +47,43 @@ namespace Chess {
 						white = true;
 					}
 					btn.BorderBrush = new SolidColorBrush(Colors.Black);
-					btn.BorderThickness = new Thickness(5);
+					btn.BorderThickness = new Thickness(3);
 					btn.Padding = new Thickness(0, -5, 0, 0);
-					btn.Margin = new Thickness(5);
+					btn.Margin = new Thickness(2);
 					buttons[i, j] = btn;
 				}
 				white = white ? false : true;
 			}
+
+			blackBrush = new SolidColorBrush(Colors.Black);
+			blueBrush = new SolidColorBrush(Colors.LightBlue);
+			greenBrush = new SolidColorBrush(Colors.LightGreen);
 		}
 
 		public void Update() {
 
+			pieces = whitePlayer.pieces;
+			pieces.AddRange(blackPlayer.pieces);
 			
 			foreach (Button b in buttons) {
-				b.Content = "";
-				foreach (Chesspiece p in whitePlayer.pieces) {
-					if (b.Name == $"Btn_{p.position.Name}")
-						b.Content = p.piece;
+				b.BorderBrush = blackBrush;
+
+				foreach (Position p in blueButtons) {
+					if (b.Name == p.BtnName)
+						b.BorderBrush = blueBrush;
 				}
-				b.BorderBrush = new SolidColorBrush(Colors.Black);
-				foreach(Position pos in blueButtons) {
-					if (b.Name == $"Btn_{pos.Name}")
-						b.BorderBrush = new SolidColorBrush(Colors.LightBlue);
+
+				foreach (Chesspiece p in pieces) {
+					if (b.Name == p.Pos.BtnName)
+						b.Content = p.Icon;
 				}
+				// Test
+				b.Content = b.Name;
 			}
-
-
+			
 			if (selectedButton != null)
-				selectedButton.BorderBrush = new SolidColorBrush(Colors.LightGreen);
-		}
+				selectedButton.BorderBrush = greenBrush;
 
-		public void MoveTo(Position position) {
-			if (state == State.White) {
-				foreach(Chesspiece p in whitePlayer.pieces) {
-					if (selectedButton.Name == $"Btn_{p.position.Name}") {
-						foreach(Position pos in blueButtons) {
-							if (pos == position) {
-								p.MovePiece(position);
-								state = State.Black;
-							}
-						}
-					}
-				}
-			} else if (state == State.Black) {
-				foreach (Chesspiece p in blackPlayer.pieces) {
-					if (selectedButton.Name == $"Btn_{p.position.Name}") {
-						foreach (Position pos in blueButtons) {
-							if (pos == position) {
-								p.MovePiece(position);
-								state = State.White;
-							}
-						}
-					}
-				}
-			}
-			Unselect();
-			blueButtons.Clear();
-		}
-
-		public bool Occupation(Position position, bool isWhite) {
-
-			foreach (Button b in buttons) {
-				if (isWhite) {
-					foreach (Chesspiece p in whitePlayer.pieces) {
-						if (b.Name == $"Btn_{p.position.Name}")
-							return true;
-					}
-				} else {
-					foreach (Chesspiece p in blackPlayer.pieces) {
-						if (b.Name == $"Btn_{p.position.Name}")
-							return true;
-					}
-				}
-			}
-			return false;
-		}
-
-		public void Select(Position position) {
-			foreach(Button b in buttons) {
-				if (b.Name == $"Btn_{position.Name}")
-					selectedButton = b;
-			}
-			if (state == State.White) {
-				foreach(Chesspiece p in whitePlayer.pieces) {
-					if (p.position == position)
-						blueButtons = p.GetMoves(whitePlayer.pieces);
-				}
-			} else if (state == State.Black) {
-				foreach(Chesspiece p in blackPlayer.pieces) {
-					if (p.position == position)
-						blueButtons = p.GetMoves(blackPlayer.pieces);
-				}
-			}
-		}
-
-		public void Unselect() {
-			selectedButton = null;
-			blueButtons.Clear();
 		}
 
 	}
