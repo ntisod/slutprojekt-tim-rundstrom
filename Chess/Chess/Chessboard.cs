@@ -10,7 +10,8 @@ using System.Windows.Media;
 namespace Chess {
 	class Chessboard {
 
-		public Button[,] buttons;
+		//public Button[,] buttons;
+		public Dictionary<string, Button> buttons;
 		List<Chesspiece> pieces;
 		public Player whitePlayer;
 		public Player blackPlayer;
@@ -23,7 +24,7 @@ namespace Chess {
 		Brush greenBrush;
 
 		public Chessboard() {
-			buttons = new Button[8, 8];
+			buttons = new Dictionary<string, Button>();
 			whitePlayer = new Player(true);
 			blackPlayer = new Player(false);
 			blueButtons = new List<Position>();
@@ -38,7 +39,7 @@ namespace Chess {
 					btn.Name = pos.BtnName;
 					Grid.SetColumn(btn, j + 1);
 					Grid.SetRow(btn, i + 2);
-					btn.FontSize = 10;
+					btn.FontSize = 40;
 					if (white) {
 						btn.Background = new SolidColorBrush(Colors.White);
 						white = false;
@@ -50,7 +51,7 @@ namespace Chess {
 					btn.BorderThickness = new Thickness(3);
 					btn.Padding = new Thickness(0, -5, 0, 0);
 					btn.Margin = new Thickness(2);
-					buttons[i, j] = btn;
+					buttons.Add(pos.Name, btn);
 				}
 				white = white ? false : true;
 			}
@@ -64,23 +65,31 @@ namespace Chess {
 
 			pieces = whitePlayer.pieces;
 			pieces.AddRange(blackPlayer.pieces);
+			blueButtons.Clear();
 			
-			foreach (Button b in buttons) {
+			foreach (KeyValuePair<string, Button> entry in buttons) {
+				Button b = entry.Value;
+
 				b.BorderBrush = blackBrush;
 
-				foreach (Position p in blueButtons) {
-					if (b.Name == p.BtnName)
+				foreach(Chesspiece p in pieces) {
+					if (p.Pos.BtnName == b.Name)
+						b.Content = p.Icon;
+					if (selectedButton != null && p.Pos.BtnName == selectedButton.Name) {
+						if (state == State.White)
+							blueButtons = p.GetMoves(whitePlayer.pieces);
+						else if (state == State.Black)
+							blueButtons = p.GetMoves(blackPlayer.pieces);
+					}
+				}
+
+				foreach (Position pos in blueButtons) {
+					if (b.Name == pos.BtnName)
 						b.BorderBrush = blueBrush;
 				}
 
-				foreach (Chesspiece p in pieces) {
-					if (b.Name == p.Pos.BtnName)
-						b.Content = p.Icon;
-				}
-				// Test
-				b.Content = b.Name;
 			}
-			
+
 			if (selectedButton != null)
 				selectedButton.BorderBrush = greenBrush;
 
