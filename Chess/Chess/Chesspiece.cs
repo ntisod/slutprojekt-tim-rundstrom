@@ -24,7 +24,7 @@ namespace Chess {
 			this.isWhite = isWhite;
 			this.value = value;
 		}
-		public abstract List<Position> GetMoves(List<Chesspiece> teamPieces);
+		public abstract List<Position> GetMoves(List<Chesspiece> pieces);
 
 		public virtual void MovePiece(Position position) {
 			pos = position;

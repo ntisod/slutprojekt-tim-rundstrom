@@ -19,9 +19,11 @@ namespace Chess {
 	/// </summary>
 	/// 
 	public enum State { White, Black, GameOver }
+	public enum GameControll { End, Restart }
 	public partial class MainWindow : Window {
 
 		Chessboard board;
+		GameControll gc = GameControll.End;
 
 		public MainWindow() {
 			InitializeComponent();
@@ -29,6 +31,8 @@ namespace Chess {
 		}
 
 		void Start() {
+			GameOverTxt.Text = "";
+
 			board = new Chessboard();
 			SetButtonEvents();
 
@@ -41,10 +45,14 @@ namespace Chess {
 			whitePoints.Text = $"White points: {board.whitePlayer.points}";
 			blackPoints.Text = $"Black points: {board.blackPlayer.points}";
 
-			board.whitePlayer.pieces.Add(new Pawn(new Position(2, 3), true));
-			board.blackPlayer.pieces.Add(new Pawn(new Position(5, 7), false));
-
+			board.SetPieces();
 			board.Update();
+
+			if (board.whitePlayer.hasLost)
+				SetVictor("Blacks Win!");
+			if (board.blackPlayer.hasLost)
+				SetVictor("Whites Win!");
+
 		}
 
 		void SetButtonEvents() {
@@ -131,47 +139,64 @@ namespace Chess {
 
 		private void Btn_Reset_Click(object sender, RoutedEventArgs e) {
 
-			MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure?", "Restart Game", MessageBoxButton.YesNo);
-			if (messageBoxResult == MessageBoxResult.Yes) {
-				SetVictor("");
+			if (gc == GameControll.End) {
+				MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure?", "Restart Game", MessageBoxButton.YesNo);
+				if (messageBoxResult == MessageBoxResult.Yes) {
+					if (board.whitePlayer.points > board.blackPlayer.points)
+						SetVictor("Whites Win!");
+					else if (board.blackPlayer.points > board.whitePlayer.points)
+						SetVictor("Blacks Win!");
+					else
+						SetVictor("Tie!");
+					gc = GameControll.Restart;
+					BtnReset.Content = "Start Game";
+					SetCoordinateOpacity(0);
+				}
+			} else {
+				gc = GameControll.End;
+				BtnReset.Content = "End Game";
+				SetCoordinateOpacity(100);
 				Start();
 			}
 
 		}
 
-		void ButtonPress(Position position) {
-		
-			if (board.state == State.White) {
-				if (board.selectedButton == null) {
-					foreach (Chesspiece p in board.whitePlayer.pieces) {
-						if (p.Pos == position)
-							board.selectedButton = board.buttons[position.Name];
-					}
-				} else {
-					if (position.BtnName == board.selectedButton.Name)
-						board.selectedButton = null;
+		void SetCoordinateOpacity(int opacity) {
+			foreach (object o in grid.Children) {
+				if (o is TextBlock) {
+					TextBlock t = (TextBlock)o;
+					if (t.Tag != null && t.Tag.ToString() == "Koordinat")
+						t.Opacity = opacity;
 				}
-			} else if (board.state == State.Black) {
-				if (board.selectedButton == null) {
-					foreach(Chesspiece p in board.blackPlayer.pieces) {
-						if (p.Pos == position)
-							board.selectedButton = board.buttons[position.Name];
-					}
+			}
+		}
+
+		void ButtonPress(Position position) {
+
+
+			if (board.selectedButton == null) {
+				board.selectedButton = board.buttons[position.Name];
+			} else {
+				if (position.BtnName == board.selectedButton.Name) {
+					board.selectedButton = null;
 				} else {
-					if (position.BtnName == board.selectedButton.Name)
-						board.selectedButton = null;
+					board.MoveTo(position);
 				}
 			}
 
 			whitePoints.Text = $"White points: {board.whitePlayer.points}";
 			blackPoints.Text = $"Black points: {board.blackPlayer.points}";
 
-			if (board.whitePlayer.hasLost)
-				SetVictor("Blacks Won!");
-			else if (board.blackPlayer.hasLost)
-				SetVictor("Whites Won!");
-
 			board.Update();
+
+			if (board.whitePlayer.hasLost) {
+				gc = GameControll.Restart;
+				SetVictor("Blacks Won!");
+			} else if (board.blackPlayer.hasLost) {
+				gc = GameControll.Restart;
+				SetVictor("Whites Won!");
+			}
+
 		}
 
 		private void Btn_A1_Click(object sender, RoutedEventArgs e) {

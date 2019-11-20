@@ -14,7 +14,7 @@ namespace Chess {
 			untouched = true;
 		}
 
-		public override List<Position> GetMoves(List<Chesspiece> teamPieces) {
+		public override List<Position> GetMoves(List<Chesspiece> pieces) {
 			List<Position> moves = new List<Position>();
 
 			int c = IsWhite ? 1 : -1;
@@ -22,13 +22,27 @@ namespace Chess {
 			if (untouched)
 				moves.Add(new Position(Pos.ColumnInt, Pos.Row + 2 * c));
 
-			foreach (Chesspiece p in teamPieces) {
-				if (untouched) {
-					if (p.Pos == moves[1])
-						moves.RemoveAt(1);
+			foreach (Chesspiece p in pieces) {
+
+				if (p.IsWhite == IsWhite) {
+					if (untouched) {
+						if (p.Pos == moves[1])
+							moves.RemoveAt(1);
+					}
+					if (p.Pos == moves[0])
+						moves.Clear();
+				} else {
+
+					if (p.Pos.ColumnInt == Pos.ColumnInt + 1 && p.Pos.Row == (Pos.Row + (1 * c))) {
+						moves.Add(p.Pos);
+					}
+
+					if (p.Pos.ColumnInt == Pos.ColumnInt - 1 && p.Pos.Row == (Pos.Row + (1 * c))) {
+						moves.Add(p.Pos);
+					}
+
 				}
-				if (p.Pos == moves[0])
-					moves.Clear();
+
 			}
 
 			return moves;

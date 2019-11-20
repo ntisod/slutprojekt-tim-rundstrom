@@ -21,5 +21,14 @@ namespace Chess {
 			hasLost = false;
 		}
 		
+		public void Update() {
+			bool isKingAlive = false;
+			foreach(Chesspiece p in pieces) {
+				if (p is King)
+					isKingAlive = true;
+			}
+			hasLost = !isKingAlive;
+		}
+
 	}
 }

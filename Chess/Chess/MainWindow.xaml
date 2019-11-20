@@ -90,11 +90,27 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        
-        
+        <TextBlock Tag="Koordinat" Text="8 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="2" />
+        <TextBlock Tag="Koordinat" Text="7 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="3" />
+        <TextBlock Tag="Koordinat" Text="6 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="4" />
+        <TextBlock Tag="Koordinat" Text="5 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="5" />
+        <TextBlock Tag="Koordinat" Text="4 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="6" />
+        <TextBlock Tag="Koordinat" Text="3 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="7" />
+        <TextBlock Tag="Koordinat" Text="2 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="8" />
+        <TextBlock Tag="Koordinat" Text="1 " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Right" Grid.Column="0" Grid.Row="9" />
+
+        <TextBlock Tag="Koordinat" Text="A " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="B " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="2" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="C " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="3" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="D " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="4" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="E " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="5" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="F " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="6" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="G " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="7" Grid.Row="10" />
+        <TextBlock Tag="Koordinat" Text="H " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="8" Grid.Row="10" />
+
         <TextBlock x:Name="whitePoints" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" />
         <TextBlock x:Name="blackPoints" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="3" />
-        <Button x:Name="BtnReset" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Content="Reset" FontSize="20" Background="White" BorderBrush="Black" Click="Btn_Reset_Click" Margin="10" Padding="0, -5, 0, 0" />
+        <Button x:Name="BtnReset" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="4" Content="End Game" FontSize="20" Background="White" BorderBrush="Black" Click="Btn_Reset_Click" Margin="10" Padding="0, -5, 0, 0" Width="130" />
         <TextBlock x:Name="GameOverTxt" FontSize="30" VerticalAlignment="Center" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="4" Grid.RowSpan="2" TextAlignment="Center" />
 
     </Grid>
