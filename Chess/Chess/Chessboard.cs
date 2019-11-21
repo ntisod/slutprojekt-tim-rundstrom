@@ -21,9 +21,6 @@ namespace Chess {
 
 		public State state;
 
-		Brush blackBrush;
-		Brush blueBrush;
-		Brush greenBrush;
 
 		public List<Position> BlueButtons { get => blueButtons; }
 
@@ -59,10 +56,6 @@ namespace Chess {
 				}
 				white = white ? false : true;
 			}
-
-			blackBrush = new SolidColorBrush(Colors.Black);
-			blueBrush = new SolidColorBrush(Colors.LightBlue);
-			greenBrush = new SolidColorBrush(Colors.LightGreen);
 
 		}
 
@@ -114,6 +107,11 @@ namespace Chess {
 
 		public void Update() {
 
+			// Set brush colours
+			Brush blackBrush = new SolidColorBrush(Colors.Black);
+			Brush blueBrush = new SolidColorBrush(Colors.LightBlue);
+			Brush greenBrush = new SolidColorBrush(Colors.LightGreen);
+
 			// Update list of all pieces
 			allPieces = whitePlayer.pieces.ToList();
 			allPieces.AddRange(blackPlayer.pieces);
@@ -158,6 +156,26 @@ namespace Chess {
 
 		}
 
+		public void Select(Position position) {
+
+			if (state == State.White) {
+				foreach (Chesspiece p in whitePlayer.pieces) {
+					if (p.Pos == position)
+						selectedButton = buttons[position.Name];
+				}
+			} else if (state == State.Black) {
+				foreach (Chesspiece p in blackPlayer.pieces) {
+					if (p.Pos == position)
+						selectedButton = buttons[position.Name];
+				}
+			}
+
+		}
+
+		public void Select() {
+			selectedButton = null;
+		}
+
 		public void MoveTo(Position position) {
 
 			foreach (Position pos in blueButtons) {
@@ -174,8 +192,6 @@ namespace Chess {
 
 		}
 
-
-		// Bruh
 		public void Attack(Position position) {
 
 			// Go through all pieces

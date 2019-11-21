@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Chess {
 	class King : Chesspiece{
 
-		public King(Position pos, bool isWhite) : base(isWhite ? "♔" : "♚", pos, isWhite, 100000) {
+		public King(Position pos, bool isWhite) : base(isWhite ? "♔" : "♚", pos, isWhite, 100) {
 
 		}
 

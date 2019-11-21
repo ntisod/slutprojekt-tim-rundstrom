@@ -32,6 +32,7 @@ namespace Chess {
 
 		void Start() {
 			GameOverTxt.Text = "";
+			SetCoordinateOpacity(100);
 
 			board = new Chessboard();
 			SetButtonEvents();
@@ -134,6 +135,7 @@ namespace Chess {
 			foreach (KeyValuePair<string, Button> b in board.buttons)
 				grid.Children.Remove(b.Value);
 			GameOverTxt.Text = message;
+			SetCoordinateOpacity(0);
 			board.state = State.GameOver;
 		}
 
@@ -150,12 +152,10 @@ namespace Chess {
 						SetVictor("Tie!");
 					gc = GameControll.Restart;
 					BtnReset.Content = "Start Game";
-					SetCoordinateOpacity(0);
 				}
 			} else {
 				gc = GameControll.End;
 				BtnReset.Content = "End Game";
-				SetCoordinateOpacity(100);
 				Start();
 			}
 
@@ -172,13 +172,12 @@ namespace Chess {
 		}
 
 		void ButtonPress(Position position) {
-
-
+			
 			if (board.selectedButton == null) {
-				board.selectedButton = board.buttons[position.Name];
+				board.Select(position);
 			} else {
 				if (position.BtnName == board.selectedButton.Name) {
-					board.selectedButton = null;
+					board.Select();
 				} else {
 					board.MoveTo(position);
 				}
