@@ -18,37 +18,61 @@ namespace Chess_online {
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 
+	/*
+	 * ------------------------------------------------
+	 * 
+	 * THREADS (ONLINE):
+	 * 1. MAIN THREAD (USER INPUTS AND CONTROLS)
+	 * 
+	 * 2. SERVER LISTEN (SERVER PART LISTENING)
+	 * 
+	 * 3. CLIENT LISTEN (CLIENT PART LISTENING)
+	 * 
+	 * THREADS (OFFLINE):
+	 * 1. MAIN THREAD (USER INPUTS AND CONTROLS)
+	 * 
+	 * ------------------------------------------------
+	 * 
+	 * ON HOST:
+	 * START SERVER AND A CLIENT (CONNECT CLIENT TO SELF / SERVER)
+	 * DISPLAY CURRENT ADDRESS AND PORT
+	 * WAIT FOR SECOND CLIENT TO CONNECT
+	 * START GAME
+	 * 
+	 * ON JOIN:
+	 * INPUT ADDRESS AND PORT
+	 * CONNECT TO SERVER
+	 * START GAME
+	 * 
+	 * ON SINGLE:
+	 * START GAME
+	 * 
+	 * ------------------------------------------------
+	 * 
+	 */
+
 	public partial class MainWindow : Window {
+
+		public static GridManager gridManager;
 
 		public MainWindow() {
 			InitializeComponent();
 			
-			GridManager newGrid = new GridManager(GridType.Main);
-			SetGrid(newGrid);
+			// Declare grid manager and set it to main menu grid.
+			gridManager = new GridManager(grid);
 
+			// Set active grid and controls (main menu)
+			gridManager.SetGrid(GridType.Main);
+			gridManager.SetControls(GridType.Main);
+
+			// DEBUGGING
 			grid.ShowGridLines = true;
 		}
 
+		
+		
 
-		public void SetGrid(GridManager newGrid) {
+		
 
-			List<ColumnDefinition> columns = newGrid.Columns;
-			List<RowDefinition> rows = newGrid.Rows;
-			List<Control> controls = newGrid.Controls;
-
-			//grid.ColumnDefinitions.Clear();
-			//grid.RowDefinitions.Clear();
-			//grid.Children.Clear();
-
-			foreach (ColumnDefinition column in columns)
-				grid.ColumnDefinitions.Add(column);
-
-			foreach (RowDefinition row in rows)
-				grid.RowDefinitions.Add(row);
-
-			foreach (Control control in controls)
-				grid.Children.Add(control);
-
-		}
 	}
 }
