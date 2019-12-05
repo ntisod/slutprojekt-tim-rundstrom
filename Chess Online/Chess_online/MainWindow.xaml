@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Chess_online"
         mc:Ignorable="d"
-        Title="Chess" Height="600" Width="600">
+        Title="Chess" Height="600" Width="600"
+        MinHeight="600" MinWidth="600">
     <Grid x:Name="grid">
 
         <Grid.ColumnDefinitions>

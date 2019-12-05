@@ -54,25 +54,20 @@ namespace Chess_online {
 	public partial class MainWindow : Window {
 
 		public static GridManager gridManager;
+		public static Chessboard board;
 
 		public MainWindow() {
 			InitializeComponent();
 			
 			// Declare grid manager and set it to main menu grid.
-			gridManager = new GridManager(grid);
+			gridManager = new GridManager(ref grid);
+			board = new Chessboard();
 
 			// Set active grid and controls (main menu)
 			gridManager.SetGrid(GridType.Main);
-			gridManager.SetControls(GridType.Main);
 
 			// DEBUGGING
-			grid.ShowGridLines = true;
+			//grid.ShowGridLines = true;
 		}
-
-		
-		
-
-		
-
 	}
 }
