@@ -17,6 +17,28 @@ namespace Chess_online {
 
 		public Client() {
 			tcpClient = new TcpClient();
+			clientThread = new Thread(ClientCycle);
+		}
+
+		public void Start(string hostname, int port) {
+		
+			tcpClient.Connect(hostname, port);
+			clientThread.Start();
+
+		}
+
+		void ClientCycle() {
+
+			while (true) {
+
+				string message = Recieve();
+
+				Application.Current.Dispatcher.Invoke(() => {
+					MainWindow.gridManager.UpdateGame(message);
+				});
+			
+			}
+
 		}
 		
 		public void Send(string message) {

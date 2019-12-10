@@ -442,12 +442,22 @@ namespace Chess_online {
 		void Connect_Btn_Click(object sender, RoutedEventArgs e) {
 			string address = "";
 			string port = "";
+			int portInt;
 
 			foreach (TextBox tb in FindVisualChildren<TextBox>(grid)) {
 				if (tb.Name == "address_Textbox")
 					address = tb.Text;
 				if (tb.Name == "port_Textbox")
 					port = tb.Text;
+			}
+
+			try {
+				portInt = Convert.ToInt32(port);
+				MainWindow.client.Start(address, portInt);
+
+				SetGrid(GridType.Game);
+				MainWindow.board.SetupGame(true);
+			} catch (Exception) {
 			}
 			
 		}
