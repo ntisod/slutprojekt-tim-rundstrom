@@ -55,6 +55,8 @@ namespace Chess_online {
 
 		public static GridManager gridManager;
 		public static Chessboard board;
+		public static Server server;
+		public static Client client;
 
 		public MainWindow() {
 			InitializeComponent();
@@ -62,6 +64,8 @@ namespace Chess_online {
 			// Declare grid manager and set it to main menu grid.
 			gridManager = new GridManager(ref grid);
 			board = new Chessboard();
+			server = new Server();
+			client = new Client();
 
 			// Set active grid and controls (main menu)
 			gridManager.SetGrid(GridType.Main);

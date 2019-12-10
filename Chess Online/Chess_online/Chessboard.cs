@@ -8,16 +8,10 @@ using System.Windows.Controls;
 namespace Chess_online {
 	public class Chessboard {
 
-		public Server server;
-		public Client client;
-
-
 		public Dictionary<string, Button> buttons;
 		bool playOnline;
 
 		public Chessboard() {
-			server = new Server();
-			client = new Client();
 
 			buttons = new Dictionary<string, Button>();
 		}
@@ -29,5 +23,6 @@ namespace Chess_online {
 
 			}
 		}
+		
 	}
 }

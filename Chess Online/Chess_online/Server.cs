@@ -5,47 +5,53 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
+using System.Threading;
+using System.Windows;
 
 namespace Chess_online {
+
 	public class Server {
 
 		TcpListener tcpListener;
-		string ip;
-		public readonly int port = 8088;
-		public string IP { get => ip; }
+		public readonly string IP = "127.0.0.1";
+		public readonly int port = 81;
+
+		Thread serverThread;
+		Socket client1;
+		Socket client2;
 
 		public Server() {
-			tcpListener = new TcpListener(IPAddress.Any, port);
-			ip = GetIPAddress();
-		}
-
-		public void UpdateIP() {
-			ip = GetIPAddress();
-		}
-		string GetIPAddress() {
-			string address = "";
-			WebRequest request = WebRequest.Create("http://checkip.dyndns.org/");
-			using (WebResponse response = request.GetResponse())
-			using (StreamReader stream = new StreamReader(response.GetResponseStream())) {
-				address = stream.ReadToEnd();
-			}
-
-			int first = address.IndexOf("Address: ") + 9;
-			address = address.Substring(first);
-
-			string ip = "";
-			for (int i = 0; i < address.Length - 16; i++)
-				ip += address[i];
-
-			return ip;
+			tcpListener = new TcpListener(IPAddress.Parse(IP), port);
+			serverThread = new Thread(ServerCycle);
 		}
 
 		public void Start() {
+			serverThread.Start();
+		}
+
+		void ServerCycle() {
 
 		}
-		public void Stop() {
 
+		void Send(string message) {
+			Byte[] bSend = Encoding.ASCII.GetBytes(message);
+			client1.Send(bSend);
+			client2.Send(bSend);
 		}
+		string Recieve(ref Socket socket) {
+
+			Byte[] bRead = new Byte[256];
+			int bReadSize = socket.Receive(bRead);
+
+			string read = "";
+			for (int i = 0; i < bReadSize; i++)
+				read += Convert.ToChar(bRead[i]);
+
+			return read;
+		}
+
 	}
+
+
+
 }

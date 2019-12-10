@@ -90,6 +90,26 @@ namespace Chess_online {
 		}
 		void SetupGame() {
 
+			ColumnDefinition col1 = new ColumnDefinition();
+			ColumnDefinition col2 = new ColumnDefinition();
+			col2.Width = new GridLength(300);
+			ColumnDefinition col3 = new ColumnDefinition();
+			grid.ColumnDefinitions.Add(col1);
+			grid.ColumnDefinitions.Add(col2);
+			grid.ColumnDefinitions.Add(col3);
+
+			RowDefinition row1 = new RowDefinition();
+			RowDefinition row2 = new RowDefinition();
+			row2.Height = new GridLength(300);
+			RowDefinition row3 = new RowDefinition();
+			row3.Height = new GridLength(100);
+			RowDefinition row4 = new RowDefinition();
+			grid.RowDefinitions.Add(row1);
+			grid.RowDefinitions.Add(row2);
+			grid.RowDefinitions.Add(row3);
+			grid.RowDefinitions.Add(row4);
+
+
 		}
 		void SetupOnline() {
 			ColumnDefinition col1 = new ColumnDefinition();
@@ -140,7 +160,7 @@ namespace Chess_online {
 		void SetupJoin() {
 			ColumnDefinition col1 = new ColumnDefinition();
 			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(100);
+			col2.Width = new GridLength(125);
 			ColumnDefinition col3 = new ColumnDefinition();
 			col3.Width = new GridLength(25);
 			ColumnDefinition col4 = new ColumnDefinition();
@@ -222,6 +242,22 @@ namespace Chess_online {
 		List<UIElement> GetGameControls() {
 			List<UIElement> controls = new List<UIElement>();
 
+			TextBlock textblock = new TextBlock();
+			textblock.Name = "Listen_TextBlock";
+			textblock.FontSize = 20;
+			textblock.Margin = new Thickness(5);
+			Grid.SetColumn(textblock, 1);
+			Grid.SetRow(textblock, 1);
+			grid.Children.Add(textblock);
+
+			TextBox textbox = new TextBox();
+			textblock.Name = "Write_TextBox";
+			textblock.FontSize = 20;
+			textblock.Margin = new Thickness(5);
+			Grid.SetColumn(textbox, 1);
+			Grid.SetRow(textbox, 2);
+			grid.Children.Add(textbox);
+
 			return controls;
 		}
 		List<UIElement> GetOnlineControls() {
@@ -261,8 +297,8 @@ namespace Chess_online {
 		List<UIElement> GetHostControls() {
 			List<UIElement> controls = new List<UIElement>();
 
-			string ip = MainWindow.board.server.IP;
-			string port = MainWindow.board.server.port.ToString();
+			string ip = MainWindow.server.IP;
+			string port = MainWindow.server.port.ToString();
 
 			TextBlock address_Text = new TextBlock();
 			address_Text.Name = "address_TextBlock";
@@ -272,7 +308,7 @@ namespace Chess_online {
 
 			Border border1 = new Border();
 			border1.BorderBrush = new SolidColorBrush(Colors.Black);
-			border1.BorderThickness = new Thickness(2);
+			border1.BorderThickness = new Thickness(1);
 			border1.Margin = new Thickness(5);
 			Grid.SetColumn(border1, 1);
 			Grid.SetRow(border1, 1);
@@ -287,7 +323,7 @@ namespace Chess_online {
 
 			Border border2 = new Border();
 			border2.BorderBrush = new SolidColorBrush(Colors.Black);
-			border2.BorderThickness = new Thickness(2);
+			border2.BorderThickness = new Thickness(1);
 			border2.Margin = new Thickness(5);
 			Grid.SetColumn(border2, 2);
 			Grid.SetRow(border2, 1);
@@ -325,6 +361,7 @@ namespace Chess_online {
 			address_Text.Name = "address_Textbox";
 			address_Text.FontSize = 20;
 			address_Text.Margin = new Thickness(5);
+			address_Text.Padding = new Thickness(0, 5, 0, 0);
 			Grid.SetColumn(address_Text, 1);
 			Grid.SetRow(address_Text, 1);
 			Grid.SetColumnSpan(address_Text, 2);
@@ -333,6 +370,7 @@ namespace Chess_online {
 			TextBox port_Text = new TextBox();
 			port_Text.FontSize = 20;
 			port_Text.Margin = new Thickness(5);
+			port_Text.Padding = new Thickness(0, 5, 0, 0);
 			Grid.SetColumn(port_Text, 3);
 			Grid.SetRow(port_Text, 1);
 			controls.Add(port_Text);
@@ -359,12 +397,17 @@ namespace Chess_online {
 			return controls;
 		}
 
+		// Update Game
+		public void UpdateGame(string message) {
+			foreach (TextBlock tb in FindVisualChildren<TextBlock>(grid)) {
+				if (tb.Name == "Listen_TextBlock")
+					tb.Text = message;
+			}
+		}
+
 		// MAIN MENU BUTTONS
 		void Play_Single_Btn_Click(object sender, RoutedEventArgs e) {
 			MainWindow.board.SetupGame(false);
-		}
-		void Play_Online_Btn_Click(object sender, RoutedEventArgs e) {
-			MainWindow.board.SetupGame(true);
 		}
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
 
@@ -391,7 +434,6 @@ namespace Chess_online {
 		// HOST MENU BUTTON
 		void Refresh_Host_Btn_Click(object sender, RoutedEventArgs e) {
 
-			MainWindow.board.server.UpdateIP();
 			SetGrid(GridType.Host);
 
 		}
@@ -399,15 +441,18 @@ namespace Chess_online {
 		// JOIN MENU BUTTON	
 		void Connect_Btn_Click(object sender, RoutedEventArgs e) {
 			string address = "";
+			string port = "";
 
 			foreach (TextBox tb in FindVisualChildren<TextBox>(grid)) {
 				if (tb.Name == "address_Textbox")
 					address = tb.Text;
+				if (tb.Name == "port_Textbox")
+					port = tb.Text;
 			}
-
-			MainWindow.board.client.Connect(address);
+			
 		}
 
+		// Find objects in grid.children
 		public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject {
 			if (depObj != null) {
 				for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
