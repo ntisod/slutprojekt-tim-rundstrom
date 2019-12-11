@@ -10,19 +10,22 @@ namespace Chess_online {
 
 		public Dictionary<string, Button> buttons;
 		bool playOnline;
+		bool isLocal;
 
 		public Chessboard() {
-
 			buttons = new Dictionary<string, Button>();
 		}
 
-		public void SetupGame(bool playOnline) {
+		public void SetupGame(bool playOnline, bool isLocal) {
 			this.playOnline = playOnline;
+			this.isLocal = isLocal;
 
-			if (playOnline) {
-
-			}
+			SetupButtons()
 		}
 		
+		void SetupButtons() {
+
+		}
+
 	}
 }

@@ -92,23 +92,61 @@ namespace Chess_online {
 
 			ColumnDefinition col1 = new ColumnDefinition();
 			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(300);
+			col2.Width = new GridLength(50);
 			ColumnDefinition col3 = new ColumnDefinition();
+			col3.Width = new GridLength(50);
+			ColumnDefinition col4 = new ColumnDefinition();
+			col4.Width = new GridLength(50);
+			ColumnDefinition col5 = new ColumnDefinition();
+			col5.Width = new GridLength(50);
+			ColumnDefinition col6 = new ColumnDefinition();
+			col6.Width = new GridLength(50);
+			ColumnDefinition col7 = new ColumnDefinition();
+			col7.Width = new GridLength(50);
+			ColumnDefinition col8 = new ColumnDefinition();
+			col8.Width = new GridLength(50);
+			ColumnDefinition col9 = new ColumnDefinition();
+			col9.Width = new GridLength(50);
+			ColumnDefinition col10 = new ColumnDefinition();
 			grid.ColumnDefinitions.Add(col1);
 			grid.ColumnDefinitions.Add(col2);
 			grid.ColumnDefinitions.Add(col3);
+			grid.ColumnDefinitions.Add(col4);
+			grid.ColumnDefinitions.Add(col5);
+			grid.ColumnDefinitions.Add(col6);
+			grid.ColumnDefinitions.Add(col7);
+			grid.ColumnDefinitions.Add(col8);
+			grid.ColumnDefinitions.Add(col9);
+			grid.ColumnDefinitions.Add(col10);
 
 			RowDefinition row1 = new RowDefinition();
 			RowDefinition row2 = new RowDefinition();
-			row2.Height = new GridLength(300);
+			row2.Height = new GridLength(50);
 			RowDefinition row3 = new RowDefinition();
-			row3.Height = new GridLength(100);
+			row3.Height = new GridLength(50);
 			RowDefinition row4 = new RowDefinition();
+			row4.Height = new GridLength(50);
+			RowDefinition row5 = new RowDefinition();
+			row5.Height = new GridLength(50);
+			RowDefinition row6 = new RowDefinition();
+			row6.Height = new GridLength(50);
+			RowDefinition row7 = new RowDefinition();
+			row7.Height = new GridLength(50);
+			RowDefinition row8 = new RowDefinition();
+			row8.Height = new GridLength(50);
+			RowDefinition row9 = new RowDefinition();
+			row9.Height = new GridLength(50);
+			RowDefinition row10 = new RowDefinition();
 			grid.RowDefinitions.Add(row1);
 			grid.RowDefinitions.Add(row2);
 			grid.RowDefinitions.Add(row3);
 			grid.RowDefinitions.Add(row4);
-
+			grid.RowDefinitions.Add(row5);
+			grid.RowDefinitions.Add(row6);
+			grid.RowDefinitions.Add(row7);
+			grid.RowDefinitions.Add(row8);
+			grid.RowDefinitions.Add(row9);
+			grid.RowDefinitions.Add(row10);
 
 		}
 		void SetupOnline() {
@@ -242,21 +280,26 @@ namespace Chess_online {
 		List<UIElement> GetGameControls() {
 			List<UIElement> controls = new List<UIElement>();
 
-			TextBlock textblock = new TextBlock();
-			textblock.Name = "Listen_TextBlock";
-			textblock.FontSize = 20;
-			textblock.Margin = new Thickness(5);
-			Grid.SetColumn(textblock, 1);
-			Grid.SetRow(textblock, 1);
-			grid.Children.Add(textblock);
 
-			TextBox textbox = new TextBox();
-			textblock.Name = "Write_TextBox";
-			textblock.FontSize = 20;
-			textblock.Margin = new Thickness(5);
-			Grid.SetColumn(textbox, 1);
-			Grid.SetRow(textbox, 2);
-			grid.Children.Add(textbox);
+			for (int i = 0; i < 8; i++) {
+				TextBlock tb = new TextBlock();
+				tb.Text = (i + 1).ToString();
+				tb.HorizontalAlignment = HorizontalAlignment.Right;
+				tb.VerticalAlignment = VerticalAlignment.Center;
+				Grid.SetColumn(tb, 0);
+				Grid.SetRow(tb, 8 - i);
+				controls.Add(tb);
+			}
+
+			for(int i = 0; i < 8; i++) {
+				TextBlock tb = new TextBlock();
+				tb.Text = ((char)(65 + i)).ToString();
+				tb.HorizontalAlignment = HorizontalAlignment.Center;
+				tb.VerticalAlignment = VerticalAlignment.Top;
+				Grid.SetColumn(tb, i + 1);
+				Grid.SetRow(tb, 9);
+				controls.Add(tb);
+			}
 
 			return controls;
 		}
@@ -368,6 +411,7 @@ namespace Chess_online {
 			controls.Add(address_Text);
 
 			TextBox port_Text = new TextBox();
+			port_Text.Name = "port_Textbox";
 			port_Text.FontSize = 20;
 			port_Text.Margin = new Thickness(5);
 			port_Text.Padding = new Thickness(0, 5, 0, 0);
@@ -407,7 +451,9 @@ namespace Chess_online {
 
 		// MAIN MENU BUTTONS
 		void Play_Single_Btn_Click(object sender, RoutedEventArgs e) {
-			MainWindow.board.SetupGame(false);
+			MainWindow.board.SetupGame(false, true);
+			SetGrid(GridType.Game);
+
 		}
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
 
@@ -423,6 +469,7 @@ namespace Chess_online {
 		// ONLINE MENU BUTTONS
 		void Host_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Host);
+			MainWindow.server.Start();
 		}
 		void Join_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Join);
@@ -456,7 +503,7 @@ namespace Chess_online {
 				MainWindow.client.Start(address, portInt);
 
 				SetGrid(GridType.Game);
-				MainWindow.board.SetupGame(true);
+				MainWindow.board.SetupGame(true, false);
 			} catch (Exception) {
 			}
 			

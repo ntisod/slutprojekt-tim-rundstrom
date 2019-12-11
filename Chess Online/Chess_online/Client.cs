@@ -18,6 +18,8 @@ namespace Chess_online {
 		public Client() {
 			tcpClient = new TcpClient();
 			clientThread = new Thread(ClientCycle);
+
+			clientThread.IsBackground = true;
 		}
 
 		public void Start(string hostname, int port) {
@@ -29,6 +31,9 @@ namespace Chess_online {
 
 		void ClientCycle() {
 
+			string startMsg = Recieve();
+			
+
 			while (true) {
 
 				string message = Recieve();
@@ -36,8 +41,9 @@ namespace Chess_online {
 				Application.Current.Dispatcher.Invoke(() => {
 					MainWindow.gridManager.UpdateGame(message);
 				});
-			
+
 			}
+			
 
 		}
 		

@@ -16,65 +16,51 @@ namespace Chess_online {
 		public readonly string IP = "127.0.0.1";
 		public readonly int port = 81;
 
-		Thread serverThread1;
-		Thread serverThread2;
-		Socket client1;
-		Socket client2;
+		Thread serverThread;
+		Socket client;
 
 		public Server() {
 			tcpListener = new TcpListener(IPAddress.Parse(IP), port);
-			serverThread1 = new Thread(Client_1_ListningCycle);
-			serverThread2 = new Thread(Client_2_ListningCycle);
+			serverThread = new Thread(ListenCycle);
+
+			serverThread.IsBackground = true;
 		}
 
 		public void Start() {
 			tcpListener.Start();
 
 			try {
-				client1 = tcpListener.AcceptSocket();
-				client2 = tcpListener.AcceptSocket();
+				
 
-				MainWindow.board.SetupGame(true);
-				MainWindow.gridManager.SetGrid(GridType.Game);
-
-				serverThread1.Start();
-				serverThread2.Start();
+				serverThread.Start();
 			} catch (Exception) {
 				tcpListener.Stop();
 			}
 		}
 
-		void Client_1_ListningCycle() {
 
-			ListenCycle(ref client1);
 
-		}
-		void Client_2_ListningCycle() {
+		void ListenCycle() {
+			try {
+				client = tcpListener.AcceptSocket();
 
-			ListenCycle(ref client2);
+				Application.Current.Dispatcher.Invoke(() => {
+					MainWindow.gridManager.SetGrid(GridType.Game);
+					MainWindow.board.SetupGame(true, true);
+				});
 
-		}
+				while (true) {
 
-		void ListenCycle(ref Socket socket) {
+					
 
-			while (true) {
-
-				string message = Recieve(ref socket);
-
-				if (message == "helo") {
-					Send("helo to yo");
-				} else {
-					Send("Nani??");
 				}
-
+			} catch (Exception) {
 			}
-
 		}
 
 		void Send(string message) {
 			Byte[] bSend = Encoding.ASCII.GetBytes(message);
-			client1.Send(bSend);
-			client2.Send(bSend);
+			client.Send(bSend);
 		}
 		string Recieve(ref Socket socket) {
 
