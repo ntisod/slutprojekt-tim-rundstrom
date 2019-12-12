@@ -28,16 +28,8 @@ namespace Chess_online {
 
 		public void Start() {
 			tcpListener.Start();
-
-			try {
-				
-
-				serverThread.Start();
-			} catch (Exception) {
-				tcpListener.Stop();
-			}
+			serverThread.Start();
 		}
-
 
 
 		void ListenCycle() {
@@ -51,12 +43,14 @@ namespace Chess_online {
 
 				while (true) {
 					string message = Recieve();
-					Send(message);
+
 
 					Application.Current.Dispatcher.Invoke(() => {
 						MainWindow.board.Update(message);
 					});
 				}
+
+
 			} catch (Exception) {
 			}
 		}

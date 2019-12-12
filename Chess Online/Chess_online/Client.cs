@@ -29,14 +29,17 @@ namespace Chess_online {
 
 		}
 
+
 		void ClientCycle() {
 			while (true) {
 				string message = Recieve();
+
 
 				Application.Current.Dispatcher.Invoke(() => {
 					MainWindow.board.Update(message);
 				});
 			}
+
 		}
 		
 		public void Send(string message) {

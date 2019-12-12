@@ -304,6 +304,7 @@ namespace Chess_online {
 				controls.Add(tb);
 			}
 
+			MainWindow.board.buttons.Clear();
 			bool white = true;
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 8; j++) {
@@ -481,9 +482,8 @@ namespace Chess_online {
 		
 		// MAIN MENU BUTTONS
 		void Play_Single_Btn_Click(object sender, RoutedEventArgs e) {
-			MainWindow.board.SetupGame(false, true);
 			SetGrid(GridType.Game);
-
+			MainWindow.board.SetupGame(false, true);
 		}
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
 
@@ -510,9 +510,7 @@ namespace Chess_online {
 
 		// HOST MENU BUTTON
 		void Refresh_Host_Btn_Click(object sender, RoutedEventArgs e) {
-
 			SetGrid(GridType.Host);
-
 		}
 
 		// JOIN MENU BUTTON	
@@ -527,6 +525,10 @@ namespace Chess_online {
 				if (tb.Name == "port_Textbox")
 					port = tb.Text;
 			}
+
+			// TEST
+			address = "127.0.0.1";
+			port = "81";
 
 			try {
 				portInt = Convert.ToInt32(port);

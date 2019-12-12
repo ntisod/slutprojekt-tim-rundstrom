@@ -27,6 +27,14 @@ namespace Chess_online {
 			btnName = $"Btn{name}";
 		}
 
+		public Position(string name) {
+			this.name = name;
+			btnName = $"Btn{name}";
+			column = name[0].ToString();
+			row = Convert.ToInt32(name[1]);
+			columnInt = Convert.ToChar(column) - 64;
+		}
+
 		public static bool operator ==(Position pos1, Position pos2) {
 			if (pos1.column == pos2.column && pos1.row == pos2.row)
 				return true;
