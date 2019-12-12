@@ -30,21 +30,13 @@ namespace Chess_online {
 		}
 
 		void ClientCycle() {
-
-			string startMsg = Recieve();
-			
-
 			while (true) {
-
 				string message = Recieve();
 
 				Application.Current.Dispatcher.Invoke(() => {
-					MainWindow.gridManager.UpdateGame(message);
+					MainWindow.board.Update(message);
 				});
-
 			}
-			
-
 		}
 		
 		public void Send(string message) {

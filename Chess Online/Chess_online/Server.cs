@@ -50,22 +50,25 @@ namespace Chess_online {
 				});
 
 				while (true) {
+					string message = Recieve();
+					Send(message);
 
-					
-
+					Application.Current.Dispatcher.Invoke(() => {
+						MainWindow.board.Update(message);
+					});
 				}
 			} catch (Exception) {
 			}
 		}
 
-		void Send(string message) {
+		public void Send(string message) {
 			Byte[] bSend = Encoding.ASCII.GetBytes(message);
 			client.Send(bSend);
 		}
-		string Recieve(ref Socket socket) {
+		string Recieve() {
 
 			Byte[] bRead = new Byte[256];
-			int bReadSize = socket.Receive(bRead);
+			int bReadSize = client.Receive(bRead);
 
 			string read = "";
 			for (int i = 0; i < bReadSize; i++)

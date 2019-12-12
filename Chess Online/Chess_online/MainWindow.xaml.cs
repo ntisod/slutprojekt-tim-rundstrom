@@ -60,12 +60,16 @@ namespace Chess_online {
 
 		public MainWindow() {
 			InitializeComponent();
-			
+
+			// Get the game button style
+			Style style = FindResource("ChessCell") as Style;
+
 			// Declare grid manager and set it to main menu grid.
-			gridManager = new GridManager(ref grid);
+			gridManager = new GridManager(ref grid, style);
 			board = new Chessboard();
 			server = new Server();
 			client = new Client();
+
 
 			// Set active grid and controls (main menu)
 			gridManager.SetGrid(GridType.Main);
@@ -73,5 +77,6 @@ namespace Chess_online {
 			// DEBUGGING
 			//grid.ShowGridLines = true;
 		}
+		
 	}
 }

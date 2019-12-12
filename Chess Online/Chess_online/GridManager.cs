@@ -12,9 +12,11 @@ namespace Chess_online {
 	public class GridManager {
 
 		Grid grid;
+		Style btnStyle;
 
-		public GridManager(ref Grid grid) {
+		public GridManager(ref Grid grid, Style btnStyle) {
 			this.grid = grid;
+			this.btnStyle = btnStyle;
 		}
 
 		// SET DESIRED GRID / CONTROL
@@ -51,10 +53,11 @@ namespace Chess_online {
 			}
 
 			grid.Children.Clear();
-			foreach (UIElement control in controls)
-				grid.Children.Add(control);
-
+			foreach (UIElement ui in controls)
+				grid.Children.Add(ui);
+			
 		}
+		
 
 		// GRID SETUP METHODS FOR MAIN MENU
 		void SetupMain() {
@@ -301,6 +304,41 @@ namespace Chess_online {
 				controls.Add(tb);
 			}
 
+			bool white = true;
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					Position pos = new Position(j + 1, 8 - i);
+					Button btn = new Button();
+					btn.Name = pos.BtnName;
+					Grid.SetColumn(btn, j + 1);
+					Grid.SetRow(btn, i + 1);
+					btn.FontSize = 40;
+					if (white) {
+						btn.Background = new SolidColorBrush(Colors.White);
+						white = false;
+					} else {
+						btn.Background = new SolidColorBrush(Colors.Gray);
+						white = true;
+					}
+					btn.BorderBrush = new SolidColorBrush(Colors.Black);
+					btn.BorderThickness = new Thickness(3);
+					btn.Padding = new Thickness(0, -5, 0, 0);
+					btn.Margin = new Thickness(2);
+					MainWindow.board.buttons.Add(pos.Name, btn);
+					controls.Add(btn);
+				}
+				white = white ? false : true;
+
+			}
+
+			foreach (UIElement ui in controls) {
+				if (ui is Button) {
+					Button btn = (Button)ui;
+					btn.Style = btnStyle;
+				}
+			}
+
+			SetGameButtonEvents();
 			return controls;
 		}
 		List<UIElement> GetOnlineControls() {
@@ -440,15 +478,7 @@ namespace Chess_online {
 
 			return controls;
 		}
-
-		// Update Game
-		public void UpdateGame(string message) {
-			foreach (TextBlock tb in FindVisualChildren<TextBlock>(grid)) {
-				if (tb.Name == "Listen_TextBlock")
-					tb.Text = message;
-			}
-		}
-
+		
 		// MAIN MENU BUTTONS
 		void Play_Single_Btn_Click(object sender, RoutedEventArgs e) {
 			MainWindow.board.SetupGame(false, true);
@@ -524,5 +554,274 @@ namespace Chess_online {
 				}
 			}
 		}
+
+		void SetGameButtonEvents() {
+
+			MainWindow.board.buttons[new Position(1, 8).Name].Click += new RoutedEventHandler(Btn_A8_Click);
+			MainWindow.board.buttons[new Position(1, 7).Name].Click += new RoutedEventHandler(Btn_A7_Click);
+			MainWindow.board.buttons[new Position(1, 6).Name].Click += new RoutedEventHandler(Btn_A6_Click);
+			MainWindow.board.buttons[new Position(1, 5).Name].Click += new RoutedEventHandler(Btn_A5_Click);
+			MainWindow.board.buttons[new Position(1, 4).Name].Click += new RoutedEventHandler(Btn_A4_Click);
+			MainWindow.board.buttons[new Position(1, 3).Name].Click += new RoutedEventHandler(Btn_A3_Click);
+			MainWindow.board.buttons[new Position(1, 2).Name].Click += new RoutedEventHandler(Btn_A2_Click);
+			MainWindow.board.buttons[new Position(1, 1).Name].Click += new RoutedEventHandler(Btn_A1_Click);
+
+			MainWindow.board.buttons[new Position(2, 8).Name].Click += new RoutedEventHandler(Btn_B8_Click);
+			MainWindow.board.buttons[new Position(2, 7).Name].Click += new RoutedEventHandler(Btn_B7_Click);
+			MainWindow.board.buttons[new Position(2, 6).Name].Click += new RoutedEventHandler(Btn_B6_Click);
+			MainWindow.board.buttons[new Position(2, 5).Name].Click += new RoutedEventHandler(Btn_B5_Click);
+			MainWindow.board.buttons[new Position(2, 4).Name].Click += new RoutedEventHandler(Btn_B4_Click);
+			MainWindow.board.buttons[new Position(2, 3).Name].Click += new RoutedEventHandler(Btn_B3_Click);
+			MainWindow.board.buttons[new Position(2, 2).Name].Click += new RoutedEventHandler(Btn_B2_Click);
+			MainWindow.board.buttons[new Position(2, 1).Name].Click += new RoutedEventHandler(Btn_B1_Click);
+
+			MainWindow.board.buttons[new Position(3, 8).Name].Click += new RoutedEventHandler(Btn_C8_Click);
+			MainWindow.board.buttons[new Position(3, 7).Name].Click += new RoutedEventHandler(Btn_C7_Click);
+			MainWindow.board.buttons[new Position(3, 6).Name].Click += new RoutedEventHandler(Btn_C6_Click);
+			MainWindow.board.buttons[new Position(3, 5).Name].Click += new RoutedEventHandler(Btn_C5_Click);
+			MainWindow.board.buttons[new Position(3, 4).Name].Click += new RoutedEventHandler(Btn_C4_Click);
+			MainWindow.board.buttons[new Position(3, 3).Name].Click += new RoutedEventHandler(Btn_C3_Click);
+			MainWindow.board.buttons[new Position(3, 2).Name].Click += new RoutedEventHandler(Btn_C2_Click);
+			MainWindow.board.buttons[new Position(3, 1).Name].Click += new RoutedEventHandler(Btn_C1_Click);
+
+			MainWindow.board.buttons[new Position(4, 8).Name].Click += new RoutedEventHandler(Btn_D8_Click);
+			MainWindow.board.buttons[new Position(4, 7).Name].Click += new RoutedEventHandler(Btn_D7_Click);
+			MainWindow.board.buttons[new Position(4, 6).Name].Click += new RoutedEventHandler(Btn_D6_Click);
+			MainWindow.board.buttons[new Position(4, 5).Name].Click += new RoutedEventHandler(Btn_D5_Click);
+			MainWindow.board.buttons[new Position(4, 4).Name].Click += new RoutedEventHandler(Btn_D4_Click);
+			MainWindow.board.buttons[new Position(4, 3).Name].Click += new RoutedEventHandler(Btn_D3_Click);
+			MainWindow.board.buttons[new Position(4, 2).Name].Click += new RoutedEventHandler(Btn_D2_Click);
+			MainWindow.board.buttons[new Position(4, 1).Name].Click += new RoutedEventHandler(Btn_D1_Click);
+
+			MainWindow.board.buttons[new Position(5, 8).Name].Click += new RoutedEventHandler(Btn_E8_Click);
+			MainWindow.board.buttons[new Position(5, 7).Name].Click += new RoutedEventHandler(Btn_E7_Click);
+			MainWindow.board.buttons[new Position(5, 6).Name].Click += new RoutedEventHandler(Btn_E6_Click);
+			MainWindow.board.buttons[new Position(5, 5).Name].Click += new RoutedEventHandler(Btn_E5_Click);
+			MainWindow.board.buttons[new Position(5, 4).Name].Click += new RoutedEventHandler(Btn_E4_Click);
+			MainWindow.board.buttons[new Position(5, 3).Name].Click += new RoutedEventHandler(Btn_E3_Click);
+			MainWindow.board.buttons[new Position(5, 2).Name].Click += new RoutedEventHandler(Btn_E2_Click);
+			MainWindow.board.buttons[new Position(5, 1).Name].Click += new RoutedEventHandler(Btn_E1_Click);
+
+			MainWindow.board.buttons[new Position(6, 8).Name].Click += new RoutedEventHandler(Btn_F8_Click);
+			MainWindow.board.buttons[new Position(6, 7).Name].Click += new RoutedEventHandler(Btn_F7_Click);
+			MainWindow.board.buttons[new Position(6, 6).Name].Click += new RoutedEventHandler(Btn_F6_Click);
+			MainWindow.board.buttons[new Position(6, 5).Name].Click += new RoutedEventHandler(Btn_F5_Click);
+			MainWindow.board.buttons[new Position(6, 4).Name].Click += new RoutedEventHandler(Btn_F4_Click);
+			MainWindow.board.buttons[new Position(6, 3).Name].Click += new RoutedEventHandler(Btn_F3_Click);
+			MainWindow.board.buttons[new Position(6, 2).Name].Click += new RoutedEventHandler(Btn_F2_Click);
+			MainWindow.board.buttons[new Position(6, 1).Name].Click += new RoutedEventHandler(Btn_F1_Click);
+
+			MainWindow.board.buttons[new Position(7, 8).Name].Click += new RoutedEventHandler(Btn_G8_Click);
+			MainWindow.board.buttons[new Position(7, 7).Name].Click += new RoutedEventHandler(Btn_G7_Click);
+			MainWindow.board.buttons[new Position(7, 6).Name].Click += new RoutedEventHandler(Btn_G6_Click);
+			MainWindow.board.buttons[new Position(7, 5).Name].Click += new RoutedEventHandler(Btn_G5_Click);
+			MainWindow.board.buttons[new Position(7, 4).Name].Click += new RoutedEventHandler(Btn_G4_Click);
+			MainWindow.board.buttons[new Position(7, 3).Name].Click += new RoutedEventHandler(Btn_G3_Click);
+			MainWindow.board.buttons[new Position(7, 2).Name].Click += new RoutedEventHandler(Btn_G2_Click);
+			MainWindow.board.buttons[new Position(7, 1).Name].Click += new RoutedEventHandler(Btn_G1_Click);
+
+			MainWindow.board.buttons[new Position(8, 8).Name].Click += new RoutedEventHandler(Btn_H8_Click);
+			MainWindow.board.buttons[new Position(8, 7).Name].Click += new RoutedEventHandler(Btn_H7_Click);
+			MainWindow.board.buttons[new Position(8, 6).Name].Click += new RoutedEventHandler(Btn_H6_Click);
+			MainWindow.board.buttons[new Position(8, 5).Name].Click += new RoutedEventHandler(Btn_H5_Click);
+			MainWindow.board.buttons[new Position(8, 4).Name].Click += new RoutedEventHandler(Btn_H4_Click);
+			MainWindow.board.buttons[new Position(8, 3).Name].Click += new RoutedEventHandler(Btn_H3_Click);
+			MainWindow.board.buttons[new Position(8, 2).Name].Click += new RoutedEventHandler(Btn_H2_Click);
+			MainWindow.board.buttons[new Position(8, 1).Name].Click += new RoutedEventHandler(Btn_H1_Click);
+		}
+
+		void Btn_A1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 1));
+		}
+		void Btn_A2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 2));
+		}
+		void Btn_A3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 3));
+		}
+		void Btn_A4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 4));
+		}
+		void Btn_A5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 5));
+		}
+		void Btn_A6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 6));
+		}
+		void Btn_A7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 7));
+		}
+		void Btn_A8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(1, 8));
+		}
+		void Btn_B1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 1));
+		}
+		void Btn_B2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 2));
+		}
+		void Btn_B3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 3));
+		}
+		void Btn_B4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 4));
+		}
+		void Btn_B5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 5));
+		}
+		void Btn_B6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 6));
+		}
+		void Btn_B7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 7));
+		}
+		void Btn_B8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(2, 8));
+		}
+		void Btn_C1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 1));
+		}
+		void Btn_C2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 2));
+		}
+		void Btn_C3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 3));
+		}
+		void Btn_C4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 4));
+		}
+		void Btn_C5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 5));
+		}
+		void Btn_C6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 6));
+		}
+		void Btn_C7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 7));
+		}
+		void Btn_C8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(3, 8));
+		}
+		void Btn_D1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 1));
+		}
+		void Btn_D2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 2));
+		}
+		void Btn_D3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 3));
+		}
+		void Btn_D4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 4));
+		}
+		void Btn_D5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 5));
+		}
+		void Btn_D6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 6));
+		}
+		void Btn_D7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 7));
+		}
+		void Btn_D8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(4, 8));
+		}
+		void Btn_E1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 1));
+		}
+		void Btn_E2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 2));
+		}
+		void Btn_E3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 3));
+		}
+		void Btn_E4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 4));
+		}
+		void Btn_E5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 5));
+		}
+		void Btn_E6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 6));
+		}
+		void Btn_E7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 7));
+		}
+		void Btn_E8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(5, 8));
+		}
+		void Btn_F1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 1));
+		}
+		void Btn_F2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 2));
+		}
+		void Btn_F3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 3));
+		}
+		void Btn_F4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 4));
+		}
+		void Btn_F5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 5));
+		}
+		void Btn_F6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 6));
+		}
+		void Btn_F7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 7));
+		}
+		void Btn_F8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(6, 8));
+		}
+		void Btn_G1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 1));
+		}
+		void Btn_G2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 2));
+		}
+		void Btn_G3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 3));
+		}
+		void Btn_G4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 4));
+		}
+		void Btn_G5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 5));
+		}
+		void Btn_G6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 6));
+		}
+		void Btn_G7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 7));
+		}
+		void Btn_G8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(7, 8));
+		}
+		void Btn_H1_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 1));
+		}
+		void Btn_H2_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 2));
+		}
+		void Btn_H3_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 3));
+		}
+		void Btn_H4_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 4));
+		}
+		void Btn_H5_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 5));
+		}
+		void Btn_H6_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 6));
+		}
+		void Btn_H7_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 7));
+		}
+		void Btn_H8_Click(object sender, RoutedEventArgs e) {
+			MainWindow.board.ButtonPress(new Position(8, 8));
+		}
+
 	}
 }
