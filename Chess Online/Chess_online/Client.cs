@@ -36,7 +36,7 @@ namespace Chess_online {
 
 
 				Application.Current.Dispatcher.Invoke(() => {
-					MainWindow.board.Update(message);
+					MainWindow.board.UpdateOnline(message);
 				});
 			}
 

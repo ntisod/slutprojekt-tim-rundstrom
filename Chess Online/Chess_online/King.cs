@@ -14,14 +14,14 @@ namespace Chess_online {
 		public override List<Position> GetMoves(List<Chesspiece> pieces) {
 			List<Position> moves = new List<Position>();
 			List<Position> potentialMoves = new List<Position>() {
-				new Position(Pos.ColumnInt+1, Pos.Row+1),
-				new Position(Pos.ColumnInt+1, Pos.Row),
-				new Position(Pos.ColumnInt+1, Pos.Row-1),
-				new Position(Pos.ColumnInt, Pos.Row+1),
-				new Position(Pos.ColumnInt, Pos.Row-1),
-				new Position(Pos.ColumnInt-1, Pos.Row+1),
-				new Position(Pos.ColumnInt-1, Pos.Row),
-				new Position(Pos.ColumnInt-1, Pos.Row-1),
+				new Position(Pos.columnInt+1, Pos.row+1),
+				new Position(Pos.columnInt+1, Pos.row),
+				new Position(Pos.columnInt+1, Pos.row-1),
+				new Position(Pos.columnInt, Pos.row+1),
+				new Position(Pos.columnInt, Pos.row-1),
+				new Position(Pos.columnInt-1, Pos.row+1),
+				new Position(Pos.columnInt-1, Pos.row),
+				new Position(Pos.columnInt-1, Pos.row-1),
 			};
 
 			foreach (Position pos in potentialMoves){

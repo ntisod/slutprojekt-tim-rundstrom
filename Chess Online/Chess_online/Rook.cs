@@ -17,65 +17,65 @@ namespace Chess_online {
 
 			bool isBlocked = false;
 			// Right moves
-			for(int i = Pos.ColumnInt + 1; i <= 8; i++) {
+			for(int i = Pos.columnInt + 1; i <= 8; i++) {
 				if (!isBlocked) {
 					foreach (Chesspiece p in pieces) {
-						if (i == p.Pos.ColumnInt && Pos.Row == p.Pos.Row) {
+						if (i == p.Pos.columnInt && Pos.row == p.Pos.row) {
 							isBlocked = true;
 							if (p.IsWhite != IsWhite)
-								moves.Add(new Position(i, Pos.Row));
+								moves.Add(new Position(i, Pos.row));
 						}
 					}
 					if (!isBlocked)
-						moves.Add(new Position(i, Pos.Row));
+						moves.Add(new Position(i, Pos.row));
 				}
 			}
 
 			isBlocked = false;
 			// Down moves
-			for(int i = Pos.Row - 1; i > 0; i--) {
+			for(int i = Pos.row - 1; i > 0; i--) {
 				if (!isBlocked) {
 					foreach (Chesspiece p in pieces) {
-						if (i == p.Pos.Row && Pos.ColumnInt == p.Pos.ColumnInt) {
+						if (i == p.Pos.row && Pos.columnInt == p.Pos.columnInt) {
 							isBlocked = true;
 							if (p.IsWhite != IsWhite)
-								moves.Add(new Position(Pos.ColumnInt, i));
+								moves.Add(new Position(Pos.columnInt, i));
 						}
 					}
 					if (!isBlocked)
-						moves.Add(new Position(Pos.ColumnInt, i));
+						moves.Add(new Position(Pos.columnInt, i));
 				}
 			}
 
 			isBlocked = false;
 			// Left moves
-			for(int i = Pos.ColumnInt - 1; i > 0; i--) {
+			for(int i = Pos.columnInt - 1; i > 0; i--) {
 				if (!isBlocked) {
 					foreach (Chesspiece p in pieces) {
-						if (i == p.Pos.ColumnInt && Pos.Row == p.Pos.Row) {
+						if (i == p.Pos.columnInt && Pos.row == p.Pos.row) {
 							isBlocked = true;
 							if (p.IsWhite != IsWhite)
-								moves.Add(new Position(i, Pos.Row));
+								moves.Add(new Position(i, Pos.row));
 						}
 					}
 					if (!isBlocked)
-						moves.Add(new Position(i, Pos.Row));
+						moves.Add(new Position(i, Pos.row));
 				}
 			}
 
 			isBlocked = false;
 			// Up moves
-			for(int i = Pos.Row + 1; i <= 8; i++) {
+			for(int i = Pos.row + 1; i <= 8; i++) {
 				if (!isBlocked) {
 					foreach (Chesspiece p in pieces) {
-						if (i == p.Pos.Row && Pos.ColumnInt == p.Pos.ColumnInt) {
+						if (i == p.Pos.row && Pos.columnInt == p.Pos.columnInt) {
 							isBlocked = true;
 							if (p.IsWhite != IsWhite)
-								moves.Add(new Position(Pos.ColumnInt, i));
+								moves.Add(new Position(Pos.columnInt, i));
 						}
 					}
 					if (!isBlocked)
-						moves.Add(new Position(Pos.ColumnInt, i));
+						moves.Add(new Position(Pos.columnInt, i));
 				}
 			}
 

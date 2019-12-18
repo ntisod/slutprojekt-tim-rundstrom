@@ -8,11 +8,13 @@ using System.Windows;
 using System.Windows.Media;
 
 namespace Chess_online {
-	public enum GridType { Main, Game, Online, Host, Join}
+	public enum GridType { Main, Game, GameOver, Online, Host, Join}
 	public class GridManager {
 
 		Grid grid;
 		Style btnStyle;
+
+		public Grid gridObj { get => grid; }
 
 		public GridManager(ref Grid grid, Style btnStyle) {
 			this.grid = grid;
@@ -20,7 +22,6 @@ namespace Chess_online {
 		}
 
 		// SET DESIRED GRID / CONTROL
-
 		public void SetGrid(GridType type) {
 			grid.ColumnDefinitions.Clear();
 			grid.RowDefinitions.Clear();
@@ -34,6 +35,10 @@ namespace Chess_online {
 				case GridType.Game:
 					SetupGame();
 					controls = GetGameControls();
+					break;
+				case GridType.GameOver:
+					SetupGameOver();
+					controls = GetGameOverControls();
 					break;
 				case GridType.Online:
 					SetupOnline();
@@ -58,171 +63,94 @@ namespace Chess_online {
 			
 		}
 		
-
 		// GRID SETUP METHODS FOR MAIN MENU
 		void SetupMain() {
 
-			ColumnDefinition col1 = new ColumnDefinition();
-			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(100);
-			ColumnDefinition col3 = new ColumnDefinition();
-			grid.ColumnDefinitions.Add(col1);
-			grid.ColumnDefinitions.Add(col2);
-			grid.ColumnDefinitions.Add(col3);
-
-			RowDefinition row1 = new RowDefinition();
-			RowDefinition row2 = new RowDefinition();
-			row2.Height = new GridLength(75);
-			RowDefinition row3 = new RowDefinition();
-			row3.Height = new GridLength(25);
-			RowDefinition row4 = new RowDefinition();
-			row4.Height = new GridLength(50);
-			RowDefinition row5 = new RowDefinition();
-			row5.Height = new GridLength(50);
-			RowDefinition row6 = new RowDefinition();
-			row6.Height = new GridLength(50);
-			RowDefinition row7 = new RowDefinition();
-			grid.RowDefinitions.Add(row1);
-			grid.RowDefinitions.Add(row2);
-			grid.RowDefinitions.Add(row3);
-			grid.RowDefinitions.Add(row4);
-			grid.RowDefinitions.Add(row5);
-			grid.RowDefinitions.Add(row6);
-			grid.RowDefinitions.Add(row7);
+			for (int i = 0; i < 3; i++)
+				grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions[1].Width = new GridLength(100);
+			
+			for (int i = 0; i < 7; i++) {
+				RowDefinition row = new RowDefinition();
+				if (i == 1)
+					row.Height = new GridLength(75);
+				else if (i == 2)
+					row.Height = new GridLength(25);
+				else if (i < 6 && i > 0)
+					row.Height = new GridLength(50);
+				grid.RowDefinitions.Add(row);
+			}
 
 		}
 		void SetupGame() {
 
-			ColumnDefinition col1 = new ColumnDefinition();
-			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(50);
-			ColumnDefinition col3 = new ColumnDefinition();
-			col3.Width = new GridLength(50);
-			ColumnDefinition col4 = new ColumnDefinition();
-			col4.Width = new GridLength(50);
-			ColumnDefinition col5 = new ColumnDefinition();
-			col5.Width = new GridLength(50);
-			ColumnDefinition col6 = new ColumnDefinition();
-			col6.Width = new GridLength(50);
-			ColumnDefinition col7 = new ColumnDefinition();
-			col7.Width = new GridLength(50);
-			ColumnDefinition col8 = new ColumnDefinition();
-			col8.Width = new GridLength(50);
-			ColumnDefinition col9 = new ColumnDefinition();
-			col9.Width = new GridLength(50);
-			ColumnDefinition col10 = new ColumnDefinition();
-			grid.ColumnDefinitions.Add(col1);
-			grid.ColumnDefinitions.Add(col2);
-			grid.ColumnDefinitions.Add(col3);
-			grid.ColumnDefinitions.Add(col4);
-			grid.ColumnDefinitions.Add(col5);
-			grid.ColumnDefinitions.Add(col6);
-			grid.ColumnDefinitions.Add(col7);
-			grid.ColumnDefinitions.Add(col8);
-			grid.ColumnDefinitions.Add(col9);
-			grid.ColumnDefinitions.Add(col10);
+			for(int i = 0; i < 10; i++) {
+				ColumnDefinition column = new ColumnDefinition();
+				RowDefinition row = new RowDefinition();
+				if (i > 0 && i < 9) {
+					column.Width = new GridLength(50);
+					row.Height = new GridLength(50);
+				}
+				grid.ColumnDefinitions.Add(column);
+				grid.RowDefinitions.Add(row);
+			}
 
-			RowDefinition row1 = new RowDefinition();
-			RowDefinition row2 = new RowDefinition();
-			row2.Height = new GridLength(50);
-			RowDefinition row3 = new RowDefinition();
-			row3.Height = new GridLength(50);
-			RowDefinition row4 = new RowDefinition();
-			row4.Height = new GridLength(50);
-			RowDefinition row5 = new RowDefinition();
-			row5.Height = new GridLength(50);
-			RowDefinition row6 = new RowDefinition();
-			row6.Height = new GridLength(50);
-			RowDefinition row7 = new RowDefinition();
-			row7.Height = new GridLength(50);
-			RowDefinition row8 = new RowDefinition();
-			row8.Height = new GridLength(50);
-			RowDefinition row9 = new RowDefinition();
-			row9.Height = new GridLength(50);
-			RowDefinition row10 = new RowDefinition();
-			grid.RowDefinitions.Add(row1);
-			grid.RowDefinitions.Add(row2);
-			grid.RowDefinitions.Add(row3);
-			grid.RowDefinitions.Add(row4);
-			grid.RowDefinitions.Add(row5);
-			grid.RowDefinitions.Add(row6);
-			grid.RowDefinitions.Add(row7);
-			grid.RowDefinitions.Add(row8);
-			grid.RowDefinitions.Add(row9);
-			grid.RowDefinitions.Add(row10);
+		}
+		void SetupGameOver() {
 
+			for(int i = 0; i < 4; i++) {
+				grid.ColumnDefinitions.Add(new ColumnDefinition());
+				grid.RowDefinitions.Add(new RowDefinition());
+			}
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+		
 		}
 		void SetupOnline() {
-			ColumnDefinition col1 = new ColumnDefinition();
-			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(100);
-			ColumnDefinition col3 = new ColumnDefinition();
-			col3.Width = new GridLength(100);
-			ColumnDefinition col4 = new ColumnDefinition();
-			grid.ColumnDefinitions.Add(col1);
-			grid.ColumnDefinitions.Add(col2);
-			grid.ColumnDefinitions.Add(col3);
-			grid.ColumnDefinitions.Add(col4);
 
-			RowDefinition row1 = new RowDefinition();
-			RowDefinition row2 = new RowDefinition();
-			row2.Height = new GridLength(50);
-			RowDefinition row3 = new RowDefinition();
-			row3.Height = new GridLength(50);
-			RowDefinition row4 = new RowDefinition();
-			grid.RowDefinitions.Add(row1);
-			grid.RowDefinitions.Add(row2);
-			grid.RowDefinitions.Add(row3);
-			grid.RowDefinitions.Add(row4);
+			for(int i = 0; i < 4; i++) {
+				ColumnDefinition column = new ColumnDefinition();
+				RowDefinition row = new RowDefinition();
+				if (i > 0 && i < 3) {
+					column.Width = new GridLength(100);
+					row.Height = new GridLength(50);
+				}
+				grid.ColumnDefinitions.Add(column);
+				grid.RowDefinitions.Add(row);
+			}
+
 		}
 		void SetupHost() {
-			ColumnDefinition col1 = new ColumnDefinition();
-			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(160);
-			ColumnDefinition col3 = new ColumnDefinition();
-			col3.Width = new GridLength(70);
-			ColumnDefinition col4 = new ColumnDefinition();
-			grid.ColumnDefinitions.Add(col1);
-			grid.ColumnDefinitions.Add(col2);
-			grid.ColumnDefinitions.Add(col3);
-			grid.ColumnDefinitions.Add(col4);
 
-			RowDefinition row1 = new RowDefinition();
-			RowDefinition row2 = new RowDefinition();
-			row2.Height = new GridLength(50);
-			RowDefinition row3 = new RowDefinition();
-			row3.Height = new GridLength(50);
-			RowDefinition row4 = new RowDefinition();
-			grid.RowDefinitions.Add(row1);
-			grid.RowDefinitions.Add(row2);
-			grid.RowDefinitions.Add(row3);
-			grid.RowDefinitions.Add(row4);
+			for (int i = 0; i < 4; i++) {
+				ColumnDefinition column = new ColumnDefinition();
+				RowDefinition row = new RowDefinition();
+				if (i == 1) {
+					column.Width = new GridLength(160);
+					row.Height = new GridLength(50);
+				} else if (i == 2) {
+					column.Width = new GridLength(70);
+					row.Height = new GridLength(50);
+				}
+				grid.ColumnDefinitions.Add(column);
+				grid.RowDefinitions.Add(row);
+			}
+
 		}
 		void SetupJoin() {
-			ColumnDefinition col1 = new ColumnDefinition();
-			ColumnDefinition col2 = new ColumnDefinition();
-			col2.Width = new GridLength(125);
-			ColumnDefinition col3 = new ColumnDefinition();
-			col3.Width = new GridLength(25);
-			ColumnDefinition col4 = new ColumnDefinition();
-			col4.Width = new GridLength(75);
-			ColumnDefinition col5 = new ColumnDefinition();
-			grid.ColumnDefinitions.Add(col1);
-			grid.ColumnDefinitions.Add(col2);
-			grid.ColumnDefinitions.Add(col3);
-			grid.ColumnDefinitions.Add(col4);
-			grid.ColumnDefinitions.Add(col5);
 
-			RowDefinition row1 = new RowDefinition();
-			RowDefinition row2 = new RowDefinition();
-			row2.Height = new GridLength(50);
-			RowDefinition row3 = new RowDefinition();
-			row3.Height = new GridLength(50);
-			RowDefinition row4 = new RowDefinition();
-			grid.RowDefinitions.Add(row1);
-			grid.RowDefinitions.Add(row2);
-			grid.RowDefinitions.Add(row3);
-			grid.RowDefinitions.Add(row4);
+			for (int i = 0; i < 5; i++)
+				grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions[1].Width = new GridLength(125);
+			grid.ColumnDefinitions[2].Width = new GridLength(25);
+			grid.ColumnDefinitions[3].Width = new GridLength(75);
+
+			for (int i = 0; i < 4; i++) {
+				RowDefinition row = new RowDefinition();
+				if (i > 0 && i < 3)
+					row.Height = new GridLength(50);
+				grid.RowDefinitions.Add(row);
+			}
+
 		}
 
 		// GET METHODS FOR MAIN MENU CONTROLS (BUTTONS)
@@ -283,25 +211,66 @@ namespace Chess_online {
 		List<UIElement> GetGameControls() {
 			List<UIElement> controls = new List<UIElement>();
 
+			TextBlock whitePointsTb = new TextBlock();
+			whitePointsTb.Name = "whitePointsTb";
+			whitePointsTb.TextAlignment = TextAlignment.Center;
+			whitePointsTb.HorizontalAlignment = HorizontalAlignment.Center;
+			whitePointsTb.VerticalAlignment = VerticalAlignment.Center;
+			Grid.SetColumn(whitePointsTb, 0);
+			Grid.SetRow(whitePointsTb, 0);
+			Grid.SetColumnSpan(whitePointsTb, 3);
+			whitePointsTb.FontSize = 15;
+			controls.Add(whitePointsTb);
+
+			TextBlock blackPointsTb = new TextBlock();
+			blackPointsTb.Name = "blackPointsTb";
+			blackPointsTb.TextAlignment = TextAlignment.Center;
+			blackPointsTb.HorizontalAlignment = HorizontalAlignment.Center;
+			blackPointsTb.VerticalAlignment = VerticalAlignment.Center;
+			Grid.SetColumn(blackPointsTb, 7);
+			Grid.SetRow(blackPointsTb, 0);
+			Grid.SetColumnSpan(blackPointsTb, 3);
+			blackPointsTb.FontSize = 15;
+			controls.Add(blackPointsTb);
+
+			TextBlock turnTb = new TextBlock();
+			turnTb.Name = "turnTb";
+			turnTb.TextAlignment = TextAlignment.Center;
+			turnTb.HorizontalAlignment = HorizontalAlignment.Center;
+			turnTb.VerticalAlignment = VerticalAlignment.Center;
+			Grid.SetColumn(turnTb, 3);
+			Grid.SetRow(turnTb, 0);
+			Grid.SetColumnSpan(turnTb, 4);
+			turnTb.FontSize = 20;
+			controls.Add(turnTb);
+
+			TextBlock colorTb = new TextBlock();
+			colorTb.Name = "colorTb";
+			colorTb.TextAlignment = TextAlignment.Center;
+			colorTb.HorizontalAlignment = HorizontalAlignment.Center;
+			colorTb.VerticalAlignment = VerticalAlignment.Bottom;
+			Grid.SetColumn(colorTb, 3);
+			Grid.SetRow(colorTb, 0);
+			Grid.SetColumnSpan(colorTb, 4);
+			colorTb.FontSize = 12;
+			controls.Add(colorTb);
 
 			for (int i = 0; i < 8; i++) {
-				TextBlock tb = new TextBlock();
-				tb.Text = (i + 1).ToString();
-				tb.HorizontalAlignment = HorizontalAlignment.Right;
-				tb.VerticalAlignment = VerticalAlignment.Center;
-				Grid.SetColumn(tb, 0);
-				Grid.SetRow(tb, 8 - i);
-				controls.Add(tb);
-			}
+				TextBlock horizontalTb = new TextBlock();
+				horizontalTb.Text = (i + 1).ToString();
+				horizontalTb.HorizontalAlignment = HorizontalAlignment.Right;
+				horizontalTb.VerticalAlignment = VerticalAlignment.Center;
+				Grid.SetColumn(horizontalTb, 0);
+				Grid.SetRow(horizontalTb, 8 - i);
+				controls.Add(horizontalTb);
 
-			for(int i = 0; i < 8; i++) {
-				TextBlock tb = new TextBlock();
-				tb.Text = ((char)(65 + i)).ToString();
-				tb.HorizontalAlignment = HorizontalAlignment.Center;
-				tb.VerticalAlignment = VerticalAlignment.Top;
-				Grid.SetColumn(tb, i + 1);
-				Grid.SetRow(tb, 9);
-				controls.Add(tb);
+				TextBlock verticalTb = new TextBlock();
+				verticalTb.Text = ((char)(65 + i)).ToString();
+				verticalTb.HorizontalAlignment = HorizontalAlignment.Center;
+				verticalTb.VerticalAlignment = VerticalAlignment.Top;
+				Grid.SetColumn(verticalTb, i + 1);
+				Grid.SetRow(verticalTb, 9);
+				controls.Add(verticalTb);
 			}
 
 			MainWindow.board.buttons.Clear();
@@ -310,36 +279,58 @@ namespace Chess_online {
 				for (int j = 0; j < 8; j++) {
 					Position pos = new Position(j + 1, 8 - i);
 					Button btn = new Button();
-					btn.Name = pos.BtnName;
+
 					Grid.SetColumn(btn, j + 1);
 					Grid.SetRow(btn, i + 1);
+
+					btn.Name = pos.btnName;
 					btn.FontSize = 40;
-					if (white) {
+
+					if (white)
 						btn.Background = new SolidColorBrush(Colors.White);
-						white = false;
-					} else {
+					else
 						btn.Background = new SolidColorBrush(Colors.Gray);
-						white = true;
-					}
+					white = white ? false : true;
+
 					btn.BorderBrush = new SolidColorBrush(Colors.Black);
 					btn.BorderThickness = new Thickness(3);
 					btn.Padding = new Thickness(0, -5, 0, 0);
 					btn.Margin = new Thickness(2);
-					MainWindow.board.buttons.Add(pos.Name, btn);
+					btn.Style = btnStyle;
+
+					MainWindow.board.buttons.Add(pos.name, btn);
 					controls.Add(btn);
 				}
 				white = white ? false : true;
-
-			}
-
-			foreach (UIElement ui in controls) {
-				if (ui is Button) {
-					Button btn = (Button)ui;
-					btn.Style = btnStyle;
-				}
 			}
 
 			SetGameButtonEvents();
+			return controls;
+		}
+		List<UIElement> GetGameOverControls() {
+			List<UIElement> controls = new List<UIElement>();
+
+			TextBlock tb = new TextBlock();
+			tb.FontSize = 50;
+			tb.HorizontalAlignment = HorizontalAlignment.Center;
+			tb.VerticalAlignment = VerticalAlignment.Center;
+			tb.TextAlignment = TextAlignment.Center;
+			Grid.SetColumn(tb, 1);
+			Grid.SetRow(tb, 1);
+			Grid.SetColumnSpan(tb, 3);
+			tb.Text = MainWindow.board.GetVictory();
+			controls.Add(tb);
+
+			Button btn = new Button();
+			btn.FontSize = 20;
+			btn.Content = "Main menu";
+			btn.HorizontalAlignment = HorizontalAlignment.Center;
+			btn.VerticalAlignment = VerticalAlignment.Center;
+			Grid.SetColumn(btn, 2);
+			Grid.SetRow(btn, 2);
+			btn.Click += Menu_Btn_Click;
+			controls.Add(btn);
+
 			return controls;
 		}
 		List<UIElement> GetOnlineControls() {
@@ -412,18 +403,6 @@ namespace Chess_online {
 			border2.Child = port_Text;
 			controls.Add(border2);
 
-			Button ref_Button = new Button();
-			ref_Button.Content = "Ref";
-			ref_Button.FontSize = 20;
-			ref_Button.Margin = new Thickness(5);
-			ref_Button.Width = 35;
-			ref_Button.Height = 35;
-			ref_Button.HorizontalAlignment = HorizontalAlignment.Left;
-			ref_Button.Click += Refresh_Host_Btn_Click;
-			Grid.SetColumn(ref_Button, 3);
-			Grid.SetRow(ref_Button, 1);
-			controls.Add(ref_Button);
-
 			Button back_Btn = new Button();
 			back_Btn.Content = "Back";
 			back_Btn.FontSize = 20;
@@ -486,14 +465,10 @@ namespace Chess_online {
 			MainWindow.board.SetupGame(false, true);
 		}
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
-
 			SetGrid(GridType.Online);
-
 		}
 		void Quit_Btn_Click(object sender, RoutedEventArgs e) {
-
 			Application.Current.Shutdown();
-
 		}
 
 		// ONLINE MENU BUTTONS
@@ -507,17 +482,11 @@ namespace Chess_online {
 		void Menu_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Main);
 		}
-
-		// HOST MENU BUTTON
-		void Refresh_Host_Btn_Click(object sender, RoutedEventArgs e) {
-			SetGrid(GridType.Host);
-		}
-
+		
 		// JOIN MENU BUTTON	
 		void Connect_Btn_Click(object sender, RoutedEventArgs e) {
 			string address = "";
 			string port = "";
-			int portInt;
 
 			foreach (TextBox tb in FindVisualChildren<TextBox>(grid)) {
 				if (tb.Name == "address_Textbox")
@@ -526,23 +495,17 @@ namespace Chess_online {
 					port = tb.Text;
 			}
 
-			// TEST
-			address = "127.0.0.1";
-			port = "81";
-
 			try {
-				portInt = Convert.ToInt32(port);
-				MainWindow.client.Start(address, portInt);
-
+				MainWindow.client.Start(address, Convert.ToInt32(port));
 				SetGrid(GridType.Game);
 				MainWindow.board.SetupGame(true, false);
 			} catch (Exception) {
 			}
-			
+
 		}
 
 		// Find objects in grid.children
-		public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject {
+		public IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject {
 			if (depObj != null) {
 				for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
 					DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
@@ -559,77 +522,77 @@ namespace Chess_online {
 
 		void SetGameButtonEvents() {
 
-			MainWindow.board.buttons[new Position(1, 8).Name].Click += new RoutedEventHandler(Btn_A8_Click);
-			MainWindow.board.buttons[new Position(1, 7).Name].Click += new RoutedEventHandler(Btn_A7_Click);
-			MainWindow.board.buttons[new Position(1, 6).Name].Click += new RoutedEventHandler(Btn_A6_Click);
-			MainWindow.board.buttons[new Position(1, 5).Name].Click += new RoutedEventHandler(Btn_A5_Click);
-			MainWindow.board.buttons[new Position(1, 4).Name].Click += new RoutedEventHandler(Btn_A4_Click);
-			MainWindow.board.buttons[new Position(1, 3).Name].Click += new RoutedEventHandler(Btn_A3_Click);
-			MainWindow.board.buttons[new Position(1, 2).Name].Click += new RoutedEventHandler(Btn_A2_Click);
-			MainWindow.board.buttons[new Position(1, 1).Name].Click += new RoutedEventHandler(Btn_A1_Click);
+			MainWindow.board.buttons[new Position(1, 8).name].Click += new RoutedEventHandler(Btn_A8_Click);
+			MainWindow.board.buttons[new Position(1, 7).name].Click += new RoutedEventHandler(Btn_A7_Click);
+			MainWindow.board.buttons[new Position(1, 6).name].Click += new RoutedEventHandler(Btn_A6_Click);
+			MainWindow.board.buttons[new Position(1, 5).name].Click += new RoutedEventHandler(Btn_A5_Click);
+			MainWindow.board.buttons[new Position(1, 4).name].Click += new RoutedEventHandler(Btn_A4_Click);
+			MainWindow.board.buttons[new Position(1, 3).name].Click += new RoutedEventHandler(Btn_A3_Click);
+			MainWindow.board.buttons[new Position(1, 2).name].Click += new RoutedEventHandler(Btn_A2_Click);
+			MainWindow.board.buttons[new Position(1, 1).name].Click += new RoutedEventHandler(Btn_A1_Click);
 
-			MainWindow.board.buttons[new Position(2, 8).Name].Click += new RoutedEventHandler(Btn_B8_Click);
-			MainWindow.board.buttons[new Position(2, 7).Name].Click += new RoutedEventHandler(Btn_B7_Click);
-			MainWindow.board.buttons[new Position(2, 6).Name].Click += new RoutedEventHandler(Btn_B6_Click);
-			MainWindow.board.buttons[new Position(2, 5).Name].Click += new RoutedEventHandler(Btn_B5_Click);
-			MainWindow.board.buttons[new Position(2, 4).Name].Click += new RoutedEventHandler(Btn_B4_Click);
-			MainWindow.board.buttons[new Position(2, 3).Name].Click += new RoutedEventHandler(Btn_B3_Click);
-			MainWindow.board.buttons[new Position(2, 2).Name].Click += new RoutedEventHandler(Btn_B2_Click);
-			MainWindow.board.buttons[new Position(2, 1).Name].Click += new RoutedEventHandler(Btn_B1_Click);
+			MainWindow.board.buttons[new Position(2, 8).name].Click += new RoutedEventHandler(Btn_B8_Click);
+			MainWindow.board.buttons[new Position(2, 7).name].Click += new RoutedEventHandler(Btn_B7_Click);
+			MainWindow.board.buttons[new Position(2, 6).name].Click += new RoutedEventHandler(Btn_B6_Click);
+			MainWindow.board.buttons[new Position(2, 5).name].Click += new RoutedEventHandler(Btn_B5_Click);
+			MainWindow.board.buttons[new Position(2, 4).name].Click += new RoutedEventHandler(Btn_B4_Click);
+			MainWindow.board.buttons[new Position(2, 3).name].Click += new RoutedEventHandler(Btn_B3_Click);
+			MainWindow.board.buttons[new Position(2, 2).name].Click += new RoutedEventHandler(Btn_B2_Click);
+			MainWindow.board.buttons[new Position(2, 1).name].Click += new RoutedEventHandler(Btn_B1_Click);
 
-			MainWindow.board.buttons[new Position(3, 8).Name].Click += new RoutedEventHandler(Btn_C8_Click);
-			MainWindow.board.buttons[new Position(3, 7).Name].Click += new RoutedEventHandler(Btn_C7_Click);
-			MainWindow.board.buttons[new Position(3, 6).Name].Click += new RoutedEventHandler(Btn_C6_Click);
-			MainWindow.board.buttons[new Position(3, 5).Name].Click += new RoutedEventHandler(Btn_C5_Click);
-			MainWindow.board.buttons[new Position(3, 4).Name].Click += new RoutedEventHandler(Btn_C4_Click);
-			MainWindow.board.buttons[new Position(3, 3).Name].Click += new RoutedEventHandler(Btn_C3_Click);
-			MainWindow.board.buttons[new Position(3, 2).Name].Click += new RoutedEventHandler(Btn_C2_Click);
-			MainWindow.board.buttons[new Position(3, 1).Name].Click += new RoutedEventHandler(Btn_C1_Click);
+			MainWindow.board.buttons[new Position(3, 8).name].Click += new RoutedEventHandler(Btn_C8_Click);
+			MainWindow.board.buttons[new Position(3, 7).name].Click += new RoutedEventHandler(Btn_C7_Click);
+			MainWindow.board.buttons[new Position(3, 6).name].Click += new RoutedEventHandler(Btn_C6_Click);
+			MainWindow.board.buttons[new Position(3, 5).name].Click += new RoutedEventHandler(Btn_C5_Click);
+			MainWindow.board.buttons[new Position(3, 4).name].Click += new RoutedEventHandler(Btn_C4_Click);
+			MainWindow.board.buttons[new Position(3, 3).name].Click += new RoutedEventHandler(Btn_C3_Click);
+			MainWindow.board.buttons[new Position(3, 2).name].Click += new RoutedEventHandler(Btn_C2_Click);
+			MainWindow.board.buttons[new Position(3, 1).name].Click += new RoutedEventHandler(Btn_C1_Click);
 
-			MainWindow.board.buttons[new Position(4, 8).Name].Click += new RoutedEventHandler(Btn_D8_Click);
-			MainWindow.board.buttons[new Position(4, 7).Name].Click += new RoutedEventHandler(Btn_D7_Click);
-			MainWindow.board.buttons[new Position(4, 6).Name].Click += new RoutedEventHandler(Btn_D6_Click);
-			MainWindow.board.buttons[new Position(4, 5).Name].Click += new RoutedEventHandler(Btn_D5_Click);
-			MainWindow.board.buttons[new Position(4, 4).Name].Click += new RoutedEventHandler(Btn_D4_Click);
-			MainWindow.board.buttons[new Position(4, 3).Name].Click += new RoutedEventHandler(Btn_D3_Click);
-			MainWindow.board.buttons[new Position(4, 2).Name].Click += new RoutedEventHandler(Btn_D2_Click);
-			MainWindow.board.buttons[new Position(4, 1).Name].Click += new RoutedEventHandler(Btn_D1_Click);
+			MainWindow.board.buttons[new Position(4, 8).name].Click += new RoutedEventHandler(Btn_D8_Click);
+			MainWindow.board.buttons[new Position(4, 7).name].Click += new RoutedEventHandler(Btn_D7_Click);
+			MainWindow.board.buttons[new Position(4, 6).name].Click += new RoutedEventHandler(Btn_D6_Click);
+			MainWindow.board.buttons[new Position(4, 5).name].Click += new RoutedEventHandler(Btn_D5_Click);
+			MainWindow.board.buttons[new Position(4, 4).name].Click += new RoutedEventHandler(Btn_D4_Click);
+			MainWindow.board.buttons[new Position(4, 3).name].Click += new RoutedEventHandler(Btn_D3_Click);
+			MainWindow.board.buttons[new Position(4, 2).name].Click += new RoutedEventHandler(Btn_D2_Click);
+			MainWindow.board.buttons[new Position(4, 1).name].Click += new RoutedEventHandler(Btn_D1_Click);
 
-			MainWindow.board.buttons[new Position(5, 8).Name].Click += new RoutedEventHandler(Btn_E8_Click);
-			MainWindow.board.buttons[new Position(5, 7).Name].Click += new RoutedEventHandler(Btn_E7_Click);
-			MainWindow.board.buttons[new Position(5, 6).Name].Click += new RoutedEventHandler(Btn_E6_Click);
-			MainWindow.board.buttons[new Position(5, 5).Name].Click += new RoutedEventHandler(Btn_E5_Click);
-			MainWindow.board.buttons[new Position(5, 4).Name].Click += new RoutedEventHandler(Btn_E4_Click);
-			MainWindow.board.buttons[new Position(5, 3).Name].Click += new RoutedEventHandler(Btn_E3_Click);
-			MainWindow.board.buttons[new Position(5, 2).Name].Click += new RoutedEventHandler(Btn_E2_Click);
-			MainWindow.board.buttons[new Position(5, 1).Name].Click += new RoutedEventHandler(Btn_E1_Click);
+			MainWindow.board.buttons[new Position(5, 8).name].Click += new RoutedEventHandler(Btn_E8_Click);
+			MainWindow.board.buttons[new Position(5, 7).name].Click += new RoutedEventHandler(Btn_E7_Click);
+			MainWindow.board.buttons[new Position(5, 6).name].Click += new RoutedEventHandler(Btn_E6_Click);
+			MainWindow.board.buttons[new Position(5, 5).name].Click += new RoutedEventHandler(Btn_E5_Click);
+			MainWindow.board.buttons[new Position(5, 4).name].Click += new RoutedEventHandler(Btn_E4_Click);
+			MainWindow.board.buttons[new Position(5, 3).name].Click += new RoutedEventHandler(Btn_E3_Click);
+			MainWindow.board.buttons[new Position(5, 2).name].Click += new RoutedEventHandler(Btn_E2_Click);
+			MainWindow.board.buttons[new Position(5, 1).name].Click += new RoutedEventHandler(Btn_E1_Click);
 
-			MainWindow.board.buttons[new Position(6, 8).Name].Click += new RoutedEventHandler(Btn_F8_Click);
-			MainWindow.board.buttons[new Position(6, 7).Name].Click += new RoutedEventHandler(Btn_F7_Click);
-			MainWindow.board.buttons[new Position(6, 6).Name].Click += new RoutedEventHandler(Btn_F6_Click);
-			MainWindow.board.buttons[new Position(6, 5).Name].Click += new RoutedEventHandler(Btn_F5_Click);
-			MainWindow.board.buttons[new Position(6, 4).Name].Click += new RoutedEventHandler(Btn_F4_Click);
-			MainWindow.board.buttons[new Position(6, 3).Name].Click += new RoutedEventHandler(Btn_F3_Click);
-			MainWindow.board.buttons[new Position(6, 2).Name].Click += new RoutedEventHandler(Btn_F2_Click);
-			MainWindow.board.buttons[new Position(6, 1).Name].Click += new RoutedEventHandler(Btn_F1_Click);
+			MainWindow.board.buttons[new Position(6, 8).name].Click += new RoutedEventHandler(Btn_F8_Click);
+			MainWindow.board.buttons[new Position(6, 7).name].Click += new RoutedEventHandler(Btn_F7_Click);
+			MainWindow.board.buttons[new Position(6, 6).name].Click += new RoutedEventHandler(Btn_F6_Click);
+			MainWindow.board.buttons[new Position(6, 5).name].Click += new RoutedEventHandler(Btn_F5_Click);
+			MainWindow.board.buttons[new Position(6, 4).name].Click += new RoutedEventHandler(Btn_F4_Click);
+			MainWindow.board.buttons[new Position(6, 3).name].Click += new RoutedEventHandler(Btn_F3_Click);
+			MainWindow.board.buttons[new Position(6, 2).name].Click += new RoutedEventHandler(Btn_F2_Click);
+			MainWindow.board.buttons[new Position(6, 1).name].Click += new RoutedEventHandler(Btn_F1_Click);
 
-			MainWindow.board.buttons[new Position(7, 8).Name].Click += new RoutedEventHandler(Btn_G8_Click);
-			MainWindow.board.buttons[new Position(7, 7).Name].Click += new RoutedEventHandler(Btn_G7_Click);
-			MainWindow.board.buttons[new Position(7, 6).Name].Click += new RoutedEventHandler(Btn_G6_Click);
-			MainWindow.board.buttons[new Position(7, 5).Name].Click += new RoutedEventHandler(Btn_G5_Click);
-			MainWindow.board.buttons[new Position(7, 4).Name].Click += new RoutedEventHandler(Btn_G4_Click);
-			MainWindow.board.buttons[new Position(7, 3).Name].Click += new RoutedEventHandler(Btn_G3_Click);
-			MainWindow.board.buttons[new Position(7, 2).Name].Click += new RoutedEventHandler(Btn_G2_Click);
-			MainWindow.board.buttons[new Position(7, 1).Name].Click += new RoutedEventHandler(Btn_G1_Click);
+			MainWindow.board.buttons[new Position(7, 8).name].Click += new RoutedEventHandler(Btn_G8_Click);
+			MainWindow.board.buttons[new Position(7, 7).name].Click += new RoutedEventHandler(Btn_G7_Click);
+			MainWindow.board.buttons[new Position(7, 6).name].Click += new RoutedEventHandler(Btn_G6_Click);
+			MainWindow.board.buttons[new Position(7, 5).name].Click += new RoutedEventHandler(Btn_G5_Click);
+			MainWindow.board.buttons[new Position(7, 4).name].Click += new RoutedEventHandler(Btn_G4_Click);
+			MainWindow.board.buttons[new Position(7, 3).name].Click += new RoutedEventHandler(Btn_G3_Click);
+			MainWindow.board.buttons[new Position(7, 2).name].Click += new RoutedEventHandler(Btn_G2_Click);
+			MainWindow.board.buttons[new Position(7, 1).name].Click += new RoutedEventHandler(Btn_G1_Click);
 
-			MainWindow.board.buttons[new Position(8, 8).Name].Click += new RoutedEventHandler(Btn_H8_Click);
-			MainWindow.board.buttons[new Position(8, 7).Name].Click += new RoutedEventHandler(Btn_H7_Click);
-			MainWindow.board.buttons[new Position(8, 6).Name].Click += new RoutedEventHandler(Btn_H6_Click);
-			MainWindow.board.buttons[new Position(8, 5).Name].Click += new RoutedEventHandler(Btn_H5_Click);
-			MainWindow.board.buttons[new Position(8, 4).Name].Click += new RoutedEventHandler(Btn_H4_Click);
-			MainWindow.board.buttons[new Position(8, 3).Name].Click += new RoutedEventHandler(Btn_H3_Click);
-			MainWindow.board.buttons[new Position(8, 2).Name].Click += new RoutedEventHandler(Btn_H2_Click);
-			MainWindow.board.buttons[new Position(8, 1).Name].Click += new RoutedEventHandler(Btn_H1_Click);
+			MainWindow.board.buttons[new Position(8, 8).name].Click += new RoutedEventHandler(Btn_H8_Click);
+			MainWindow.board.buttons[new Position(8, 7).name].Click += new RoutedEventHandler(Btn_H7_Click);
+			MainWindow.board.buttons[new Position(8, 6).name].Click += new RoutedEventHandler(Btn_H6_Click);
+			MainWindow.board.buttons[new Position(8, 5).name].Click += new RoutedEventHandler(Btn_H5_Click);
+			MainWindow.board.buttons[new Position(8, 4).name].Click += new RoutedEventHandler(Btn_H4_Click);
+			MainWindow.board.buttons[new Position(8, 3).name].Click += new RoutedEventHandler(Btn_H3_Click);
+			MainWindow.board.buttons[new Position(8, 2).name].Click += new RoutedEventHandler(Btn_H2_Click);
+			MainWindow.board.buttons[new Position(8, 1).name].Click += new RoutedEventHandler(Btn_H1_Click);
 		}
 
 		void Btn_A1_Click(object sender, RoutedEventArgs e) {

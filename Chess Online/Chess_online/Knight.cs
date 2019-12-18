@@ -15,14 +15,14 @@ namespace Chess_online {
 			List<Position> moves = new List<Position>();
 
 			List<Position> potentialMoves = new List<Position>() {
-				new Position(Pos.ColumnInt + 2, Pos.Row + 1),
-				new Position(Pos.ColumnInt - 2, Pos.Row + 1),
-				new Position(Pos.ColumnInt + 2, Pos.Row - 1),
-				new Position(Pos.ColumnInt - 2, Pos.Row - 1),
-				new Position(Pos.ColumnInt + 1, Pos.Row + 2),
-				new Position(Pos.ColumnInt - 1, Pos.Row + 2),
-				new Position(Pos.ColumnInt + 1, Pos.Row - 2),
-				new Position(Pos.ColumnInt - 1, Pos.Row - 2),
+				new Position(Pos.columnInt + 2, Pos.row + 1),
+				new Position(Pos.columnInt - 2, Pos.row + 1),
+				new Position(Pos.columnInt + 2, Pos.row - 1),
+				new Position(Pos.columnInt - 2, Pos.row - 1),
+				new Position(Pos.columnInt + 1, Pos.row + 2),
+				new Position(Pos.columnInt - 1, Pos.row + 2),
+				new Position(Pos.columnInt + 1, Pos.row - 2),
+				new Position(Pos.columnInt - 1, Pos.row - 2),
 			};
 
 			foreach(Position pos in potentialMoves) {

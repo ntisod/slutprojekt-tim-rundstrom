@@ -74,9 +74,7 @@ namespace Chess_online {
 
 			// Set active grid and controls (main menu)
 			gridManager.SetGrid(GridType.Main);
-
-			// DEBUGGING
-			//grid.ShowGridLines = true;
+			
 		}
 
 

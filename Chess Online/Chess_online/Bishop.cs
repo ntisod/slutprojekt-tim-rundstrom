@@ -16,11 +16,11 @@ namespace Chess_online {
 
 			bool isBlocked = false;
 			// Right up moves
-			int row = Pos.Row;
-			for (int i = Pos.ColumnInt + 1; i <= 8; i++) {
+			int row = Pos.row;
+			for (int i = Pos.columnInt + 1; i <= 8; i++) {
 				row++;
 				foreach(Chesspiece p in pieces) {
-					if (i == p.Pos.ColumnInt && row == p.Pos.Row) {
+					if (i == p.Pos.columnInt && row == p.Pos.row) {
 						isBlocked = true;
 						if (p.IsWhite != IsWhite)
 							moves.Add(new Position(i, row));
@@ -33,11 +33,11 @@ namespace Chess_online {
 
 			isBlocked = false;
 			// Left up moves
-			row = Pos.Row;
-			for (int i = Pos.ColumnInt - 1; i > 0; i--) {
+			row = Pos.row;
+			for (int i = Pos.columnInt - 1; i > 0; i--) {
 				row++;
 				foreach(Chesspiece p in pieces) {
-					if (i == p.Pos.ColumnInt && row == p.Pos.Row) {
+					if (i == p.Pos.columnInt && row == p.Pos.row) {
 						isBlocked = true;
 						if (p.IsWhite != IsWhite)
 							moves.Add(new Position(i, row));
@@ -50,11 +50,11 @@ namespace Chess_online {
 
 			isBlocked = false;
 			//Right down moves
-			row = Pos.Row;
-			for (int i = Pos.ColumnInt + 1; i <= 8; i++) {
+			row = Pos.row;
+			for (int i = Pos.columnInt + 1; i <= 8; i++) {
 				row--;
 				foreach (Chesspiece p in pieces) {
-					if (i == p.Pos.ColumnInt && row == p.Pos.Row) {
+					if (i == p.Pos.columnInt && row == p.Pos.row) {
 						isBlocked = true;
 						if (p.IsWhite != IsWhite)
 							moves.Add(new Position(i, row));
@@ -67,11 +67,11 @@ namespace Chess_online {
 
 			isBlocked = false;
 			// Left down moves
-			row = Pos.Row;
-			for (int i = Pos.ColumnInt - 1; i > 0; i--) {
+			row = Pos.row;
+			for (int i = Pos.columnInt - 1; i > 0; i--) {
 				row--;
 				foreach (Chesspiece p in pieces) {
-					if (i == p.Pos.ColumnInt && row == p.Pos.Row) {
+					if (i == p.Pos.columnInt && row == p.Pos.row) {
 						isBlocked = true;
 						if (p.IsWhite != IsWhite)
 							moves.Add(new Position(i, row));

@@ -11,7 +11,8 @@ namespace Chess_online {
 	public class Chessboard {
 
 		public Dictionary<string, Button> buttons;
-		public Button selectedButton;
+		Button selectedButton;
+		Button opponentSelecedButton;
 		List<Position> blueButtons;
 		List<Chesspiece> allPieces;
 
@@ -23,6 +24,8 @@ namespace Chess_online {
 		bool playOnline;
 		bool isLocal;
 		bool localWhite;
+
+		public bool LocalWhite { get => localWhite; }
 
 		public Chessboard() {
 			buttons = new Dictionary<string, Button>();
@@ -38,14 +41,36 @@ namespace Chess_online {
 			this.playOnline = playOnline;
 			this.isLocal = isLocal;
 
-			if (playOnline) {
-				if (isLocal)
-					localWhite = true;
-				else
-					localWhite = false;
-			}
+			if (playOnline && isLocal)
+				localWhite = true;
+			else if (playOnline && !isLocal)
+				localWhite = false;
+			
 			SetPieces();
-			UpdateBoard(true);
+			UpdateBoard();
+		}
+		void SetTextBlocks() {
+			foreach (TextBlock tb in MainWindow.gridManager.FindVisualChildren<TextBlock>(MainWindow.gridManager.gridObj)) {
+				if (tb.Name == "whitePointsTb")
+					tb.Text = $"White Points: {whitePlayer.points}";
+				if (tb.Name == "blackPointsTb")
+					tb.Text = $"Black Points: {blackPlayer.points}";
+				if (tb.Name == "turnTb") {
+					if (whitesTurn)
+						tb.Text = "Whites turn";
+					else
+						tb.Text = "Blacks turn";
+
+				}
+				if (tb.Name == "colorTb" && playOnline) {
+
+					if (localWhite)
+						tb.Text = "White";
+					else
+						tb.Text = "Black";
+
+				}
+			}
 		}
 		public void SetPieces() {
 			//
@@ -93,20 +118,30 @@ namespace Chess_online {
 			blackPlayer.pieces.Add(new King(new Position(5, 8), false));
 		}
 
+		public string GetVictory() {
+			if (whitePlayer.hasLost || blackPlayer.points > whitePlayer.points)
+				return "Blacks Win!";
+			else if (blackPlayer.hasLost || whitePlayer.points > blackPlayer.points)
+				return "Whites Win!";
+			else
+				return "It's a tie!";
+		}
+
 		public void ButtonPress(Position position) {
 
 			// GET ACTION
 			string actionMessage = GetAction(position);
+			MessageBox.Show(actionMessage);
 			if (playOnline) {
 				if (whitesTurn == localWhite) {
 					if (isLocal)
 						MainWindow.server.Send(actionMessage);
 					else
 						MainWindow.client.Send(actionMessage);
-					Update(actionMessage);
+					UpdateOnline(actionMessage);
 				}
 			} else 
-				Update(actionMessage);
+				UpdateOffline(actionMessage);
 		}
 		
 		string GetAction(Position position) {
@@ -119,7 +154,7 @@ namespace Chess_online {
 			if (selectedButton == null)
 				actionMessage += "S-";
 			else {
-				if (selectedButton.Name == position.BtnName)
+				if (selectedButton.Name == position.btnName)
 					actionMessage += "D-";
 				else {
 					bool move = false;
@@ -130,52 +165,87 @@ namespace Chess_online {
 					if (move)
 						actionMessage += "M-";
 					else
-						actionMessage = "";
+						actionMessage += "E-";
 				}
 			}
-			actionMessage += position.Name;
+			actionMessage += position.name;
 			return actionMessage;
 		}
 
-		public void Update(string message) {
+		public void UpdateOffline(string message) {
 
 			// Update according to message
+			string turn = message[0].ToString();
+			string action = message[2].ToString();
 
-			if (message.Length != 0) {
-
-				Position position = new Position(message.Substring(4));
-
-				char action = message[2];
-				if (action == 'S') {
-					
+			int columnInt = Convert.ToChar(message[4]) - 64;
+			int row = Convert.ToInt32(message[5].ToString());
+			Position position = new Position(columnInt, row);
 
 
-				} else if (action == 'D') {
+			// Update list of all pieces
+			allPieces = whitePlayer.pieces.ToList();
+			allPieces.AddRange(blackPlayer.pieces);
 
+			if (turn == "W" && whitesTurn || turn == "B" && !whitesTurn) {
+
+				if (action == "S")
+					Select(position);
+				else if (action == "S")
+					opponentSelecedButton = buttons[position.name];
+				else if (action == "D") {
 					selectedButton = null;
-					blueButtons.Clear();
-
-				} else if (action == 'M') {
-
-
-
+					opponentSelecedButton = null;
+				} else if (action == "M") {
+					MoveTo(selectedButton, position);
+					whitesTurn = whitesTurn ? false : true;
+				} else if (action == "M") {
+					MoveTo(opponentSelecedButton, position);
+					whitesTurn = whitesTurn ? false : true;
 				}
-
 			}
-			bool showMoves;
-			if (playOnline) {
-				if (whitesTurn == localWhite)
-					showMoves = true;
-				else
-					showMoves = false;
-			} else
-				showMoves = true;
+			UpdateBoard();
 
-			UpdateBoard(showMoves);
 
 		}
 
-		void UpdateBoard(bool showMoves) {
+		public void UpdateOnline(string message) {
+
+			// Update according to message
+			string turn = message[0].ToString();
+			string action = message[2].ToString();
+			
+			int columnInt = Convert.ToChar(message[4]) - 64;
+			int row = Convert.ToInt32(message[5].ToString());
+			Position position = new Position(columnInt, row);
+
+
+			// Update list of all pieces
+			allPieces = whitePlayer.pieces.ToList();
+			allPieces.AddRange(blackPlayer.pieces);
+			
+			if (turn == "W" && whitesTurn || turn == "B" && !whitesTurn) {
+
+				if (action == "S" && whitesTurn == localWhite)
+					Select(position);
+				else if (action == "S" && whitesTurn != localWhite)
+					opponentSelecedButton = buttons[position.name];
+				else if (action == "D") {
+					selectedButton = null;
+					opponentSelecedButton = null;
+				} else if (action == "M" && whitesTurn == localWhite) {
+					MoveTo(selectedButton, position);
+					whitesTurn = whitesTurn ? false : true;
+				} else if (action == "M" && whitesTurn != localWhite) {
+					MoveTo(opponentSelecedButton, position);
+					whitesTurn = whitesTurn ? false : true;
+				}
+			}
+			UpdateBoard();
+
+		}
+
+		void UpdateBoard() {
 			// Set brush colours
 			Brush blackBrush = new SolidColorBrush(Colors.Black);
 			Brush blueBrush = new SolidColorBrush(Colors.LightBlue);
@@ -199,33 +269,90 @@ namespace Chess_online {
 
 			// Go through pieces
 			foreach (Chesspiece p in allPieces) {
-				buttons[p.Pos.Name].Content = p.Icon; // Update each piece icon
-
-				// Get the bluebuttons if a button is selected
-				if (selectedButton != null && p.Pos.BtnName == selectedButton.Name)
-					blueButtons = p.GetMoves(allPieces);
+				buttons[p.Pos.name].Content = p.Icon; // Update each piece icon	
 			}
 
+			// Get the bluebuttons if a button is selected
+			SetBlueButtons(selectedButton);
+			SetBlueButtons(opponentSelecedButton);
+
 			// Go through every bluebutton and set the stroke
-			if (showMoves) {
+			if (selectedButton != null) {
 				foreach (Position pos in blueButtons) {
 					try {
-						buttons[pos.Name].BorderBrush = blueBrush;
-					} catch (System.Collections.Generic.KeyNotFoundException) {
+						buttons[pos.name].BorderBrush = blueBrush;
+					} catch (KeyNotFoundException) {
 						// Just ignore error, button is outside the chessboards boarders
 					}
 				}
 			}
 
 			// color the selected button
-			if (selectedButton != null && showMoves)
+			if (selectedButton != null)
 				selectedButton.BorderBrush = greenBrush;
 
 			// Update players
 			whitePlayer.Update();
 			blackPlayer.Update();
+
+			SetTextBlocks();
+
+			if (whitePlayer.hasLost || blackPlayer.hasLost) {
+				MainWindow.gridManager.SetGrid(GridType.GameOver);
+			}
 		}
 
+		void SetBlueButtons(Button btn) {
+			foreach (Chesspiece p in allPieces) {
+				if (btn != null && p.Pos.btnName == btn.Name)
+					blueButtons = p.GetMoves(allPieces);
+			}
+		}
+
+		void Select(Position position) {
+			foreach (Chesspiece piece in allPieces) {
+				if (piece.Pos == position) {
+					if (piece.IsWhite == localWhite) {
+						selectedButton = buttons[position.name];
+					}
+				}
+			}
+		}
+
+		void MoveTo(Button btn, Position position) {
+			SetBlueButtons(btn);
+			foreach (Position pos in blueButtons) {
+				if (position == pos) {
+					Attack(position);
+					foreach (Chesspiece p in allPieces) {
+						if (btn.Name == p.Pos.btnName)
+							p.MovePiece(position);
+					}
+					selectedButton = null;
+				}
+			}
+		}
+		void Attack(Position position) {
+
+			// Go through all pieces
+			foreach (Chesspiece p in allPieces) {
+
+				// If the piece is the one we're seeking
+				if (p.Pos == position) {
+					// then kill it and give the opposite player the corresponding points
+
+					if (p.IsWhite) {
+						whitePlayer.pieces.Remove(p);
+						blackPlayer.points += p.Value;
+					} else {
+						blackPlayer.pieces.Remove(p);
+						whitePlayer.points += p.Value;
+					}
+				}
+
+			}
+
+		}
 
 	}
 }

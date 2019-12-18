@@ -18,9 +18,9 @@ namespace Chess_online {
 			List<Position> moves = new List<Position>();
 
 			int c = IsWhite ? 1 : -1;
-			moves.Add(new Position(Pos.ColumnInt, Pos.Row + 1 * c));
+			moves.Add(new Position(Pos.columnInt, Pos.row + 1 * c));
 			if (untouched)
-				moves.Add(new Position(Pos.ColumnInt, Pos.Row + 2 * c));
+				moves.Add(new Position(Pos.columnInt, Pos.row + 2 * c));
 
 			foreach (Chesspiece p in pieces) {
 
@@ -33,11 +33,11 @@ namespace Chess_online {
 						moves.Clear();
 				} else {
 
-					if (p.Pos.ColumnInt == Pos.ColumnInt + 1 && p.Pos.Row == (Pos.Row + (1 * c))) {
+					if (p.Pos.columnInt == Pos.columnInt + 1 && p.Pos.row == (Pos.row + (1 * c))) {
 						moves.Add(p.Pos);
 					}
 
-					if (p.Pos.ColumnInt == Pos.ColumnInt - 1 && p.Pos.Row == (Pos.Row + (1 * c))) {
+					if (p.Pos.columnInt == Pos.columnInt - 1 && p.Pos.row == (Pos.row + (1 * c))) {
 						moves.Add(p.Pos);
 					}
 
