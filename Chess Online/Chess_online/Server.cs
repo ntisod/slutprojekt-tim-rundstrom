@@ -31,6 +31,33 @@ namespace Chess_online {
 			serverThread.Start();
 		}
 
+		public void Terminate() {
+			try {
+				tcpListener.Stop();
+				serverThread.Abort();
+				serverThread = new Thread(ListenCycle);
+				serverThread.IsBackground = true;
+				tcpListener.Stop();
+			} catch(Exception) {
+			}
+		}
+		public void Stop() {
+			try {
+				Send("END");
+				while (true) {
+					string endMessage = Recieve();
+					if (endMessage == "END") {
+						tcpListener.Stop();
+						break;
+					}
+				}
+				serverThread.Abort();
+				serverThread = new Thread(ListenCycle);
+				serverThread.IsBackground = true;
+				tcpListener.Stop();
+			} catch (Exception) {
+			}
+		}
 
 		void ListenCycle() {
 			try {
@@ -41,15 +68,24 @@ namespace Chess_online {
 					MainWindow.board.SetupGame(true, true);
 				});
 
+				string message;
 				while (true) {
-					string message = Recieve();
+					message = Recieve();
 
+					if (message == "END" || message == "GAME OVER")
+						break;
 
 					Application.Current.Dispatcher.Invoke(() => {
 						MainWindow.board.UpdateOnline(message);
 					});
 				}
 
+				Application.Current.Dispatcher.Invoke(() => {
+					MainWindow.gridManager.SetGrid(GridType.Main);
+				});
+				if (message == "END")
+					MessageBox.Show("Game ended prematurely.");
+				tcpListener.Stop();
 
 			} catch (Exception) {
 			}

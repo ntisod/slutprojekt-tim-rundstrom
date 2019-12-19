@@ -61,6 +61,7 @@ namespace Chess_online {
 
 		public MainWindow() {
 			InitializeComponent();
+			AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
 
 			// Get the game button style
 			Style style = FindResource("ChessCell") as Style;
@@ -74,9 +75,12 @@ namespace Chess_online {
 
 			// Set active grid and controls (main menu)
 			gridManager.SetGrid(GridType.Main);
-			
-		}
 
+		}
+		static void OnProcessExit(object sender, EventArgs e) {
+			server.Stop();
+			client.Stop();
+		}
 
 	}
 }

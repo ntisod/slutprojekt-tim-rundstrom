@@ -35,7 +35,10 @@ namespace Chess_online {
 			blackPlayer = new Player(false);
 		}
 
-		public void SetupGame(bool playOnline, bool isLocal) { 
+		public void SetupGame(bool playOnline, bool isLocal) {
+			whitePlayer.points = 0;
+			blackPlayer.points = 0;
+
 			whitesTurn = true;
 			selectedButton = null;
 			this.playOnline = playOnline;
@@ -73,6 +76,8 @@ namespace Chess_online {
 			}
 		}
 		public void SetPieces() {
+			whitePlayer.pieces.Clear();
+			blackPlayer.pieces.Clear();
 			//
 			// Whites
 			//
@@ -131,7 +136,6 @@ namespace Chess_online {
 
 			// GET ACTION
 			string actionMessage = GetAction(position);
-			MessageBox.Show(actionMessage);
 			if (playOnline) {
 				if (whitesTurn == localWhite) {
 					if (isLocal)
@@ -191,22 +195,14 @@ namespace Chess_online {
 
 				if (action == "S")
 					Select(position);
-				else if (action == "S")
-					opponentSelecedButton = buttons[position.name];
 				else if (action == "D") {
 					selectedButton = null;
-					opponentSelecedButton = null;
 				} else if (action == "M") {
 					MoveTo(selectedButton, position);
-					whitesTurn = whitesTurn ? false : true;
-				} else if (action == "M") {
-					MoveTo(opponentSelecedButton, position);
 					whitesTurn = whitesTurn ? false : true;
 				}
 			}
 			UpdateBoard();
-
-
 		}
 
 		public void UpdateOnline(string message) {
@@ -299,6 +295,7 @@ namespace Chess_online {
 
 			if (whitePlayer.hasLost || blackPlayer.hasLost) {
 				MainWindow.gridManager.SetGrid(GridType.GameOver);
+				MainWindow.client.Send("GAME OVER");
 			}
 		}
 
@@ -312,8 +309,12 @@ namespace Chess_online {
 		void Select(Position position) {
 			foreach (Chesspiece piece in allPieces) {
 				if (piece.Pos == position) {
-					if (piece.IsWhite == localWhite) {
-						selectedButton = buttons[position.name];
+					if (playOnline) {
+						if (piece.IsWhite == localWhite)
+							selectedButton = buttons[position.name];
+					} else {
+						if (piece.IsWhite == whitesTurn)
+							selectedButton = buttons[position.name];
 					}
 				}
 			}

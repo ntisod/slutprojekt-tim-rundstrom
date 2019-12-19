@@ -465,6 +465,8 @@ namespace Chess_online {
 			MainWindow.board.SetupGame(false, true);
 		}
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
+			MainWindow.server.Terminate();
+			MainWindow.client.Stop();
 			SetGrid(GridType.Online);
 		}
 		void Quit_Btn_Click(object sender, RoutedEventArgs e) {
@@ -500,6 +502,7 @@ namespace Chess_online {
 				SetGrid(GridType.Game);
 				MainWindow.board.SetupGame(true, false);
 			} catch (Exception) {
+				MessageBox.Show("Server not found.\nPlease make sure the IP adress and port is correct.");
 			}
 
 		}
