@@ -8,521 +8,510 @@ using System.Windows;
 using System.Windows.Media;
 
 namespace Chess_online {
+	/// <summary>
+	/// Public enum of different grids available, used for setting the grid
+	/// </summary>
 	public enum GridType { Main, Game, GameOver, Online, Host, Join}
+	/// <summary>
+	/// Managing object for the application grid.
+	/// Used for managing the grid and change the grid and ui elements with one single method
+	/// </summary>
 	public class GridManager {
 
-		Grid grid;
-		Style btnStyle;
+		Grid grid; // The application grid
+		Style btnStyle; // Button style for game buttons (the chessboard)
 
-		public Grid gridObj { get => grid; }
-
+		/// <summary>
+		/// Constructor for the manager object
+		/// </summary>
+		/// <param name="grid"></param>
+		/// <param name="btnStyle"></param>
 		public GridManager(ref Grid grid, Style btnStyle) {
 			this.grid = grid;
 			this.btnStyle = btnStyle;
 		}
 
-		// SET DESIRED GRID / CONTROL
+		/// <summary>
+		/// Public method used for setting the whole grid and ui elements with one call
+		/// </summary>
+		/// <param name="type"></param>
 		public void SetGrid(GridType type) {
+			// Reset the grid columns and rows defintions
 			grid.ColumnDefinitions.Clear();
 			grid.RowDefinitions.Clear();
-			List<UIElement> controls;
+			// Declare UI element list 
+			List<UIElement> controls = new List<UIElement>();
 
+			// Switch case for setting grid/ui elements depending on gridtype
 			switch (type) {
 				case GridType.Main:
-					SetupMain();
-					controls = GetMainControls();
+					SetupMain(); // Set grid
+					controls = GetMainControls(); // Get ui elements / controlls
 					break;
 				case GridType.Game:
-					SetupGame();
-					controls = GetGameControls();
+					SetupGame(); // Set grid
+					controls = GetGameControls(); // Get ui elements / controlls
 					break;
 				case GridType.GameOver:
-					SetupGameOver();
-					controls = GetGameOverControls();
+					SetupGameOver(); // Set grid
+					controls = GetGameOverControls(); // Get ui elements / controlls
 					break;
 				case GridType.Online:
-					SetupOnline();
-					controls = GetOnlineControls();
+					SetupOnline(); // Set grid
+					controls = GetOnlineControls(); // Get ui elements / controlls
 					break;
 				case GridType.Host:
-					SetupHost();
-					controls = GetHostControls();
+					SetupHost(); // Set grid
+					controls = GetHostControls(); // Get ui elements / controlls
 					break;
 				case GridType.Join:
-					SetupJoin();
-					controls = GetJoinControls();
-					break;
-				default:
-					controls = new List<UIElement>();
+					SetupJoin(); // Set grid
+					controls = GetJoinControls(); // Get ui elements / controlls
 					break;
 			}
 
-			grid.Children.Clear();
-			foreach (UIElement ui in controls)
+			grid.Children.Clear(); // Clear the ui elements
+			// Fill the grid ui elements with the desired ui elements
+			foreach (UIElement ui in controls) 
 				grid.Children.Add(ui);
 			
 		}
 		
-		// GRID SETUP METHODS FOR MAIN MENU
+		/// <summary>
+		/// Sets the columndefinitions and rowdefinitions for the main menu
+		/// </summary>
 		void SetupMain() {
-
+			// Add 3 columns
 			for (int i = 0; i < 3; i++)
 				grid.ColumnDefinitions.Add(new ColumnDefinition());
-			grid.ColumnDefinitions[1].Width = new GridLength(100);
+			grid.ColumnDefinitions[1].Width = new GridLength(100); // Set the middle columns width to 100
 			
+			// Add 7 rows
 			for (int i = 0; i < 7; i++) {
 				RowDefinition row = new RowDefinition();
-				if (i == 1)
-					row.Height = new GridLength(75);
-				else if (i == 2)
-					row.Height = new GridLength(25);
-				else if (i < 6 && i > 0)
-					row.Height = new GridLength(50);
-				grid.RowDefinitions.Add(row);
+				if (i == 1) // If it's the second row
+					row.Height = new GridLength(75); // Set the height to 75
+				else if (i == 2) // If it's the third row
+					row.Height = new GridLength(25); // Set the height to 25
+				else if (i < 6 && i > 0) // If it's the fourth to next to last row
+					row.Height = new GridLength(50); // Set the height to 50
+				grid.RowDefinitions.Add(row); // Add the row to rowdefinitions
 			}
 
 		}
+		/// <summary>
+		/// Sets the columndefinitions and rowdefinitions for the main game
+		/// </summary>
 		void SetupGame() {
 
+			// Set 10 columns and rows
 			for(int i = 0; i < 10; i++) {
 				ColumnDefinition column = new ColumnDefinition();
 				RowDefinition row = new RowDefinition();
-				if (i > 0 && i < 9) {
-					column.Width = new GridLength(50);
-					row.Height = new GridLength(50);
+				if (i > 0 && i < 9) { // If it's not the first to last column/row
+					column.Width = new GridLength(50); // Set the width to 50
+					row.Height = new GridLength(50); // Set the height to 50
 				}
-				grid.ColumnDefinitions.Add(column);
-				grid.RowDefinitions.Add(row);
+				grid.ColumnDefinitions.Add(column); // Add the column to the grid
+				grid.RowDefinitions.Add(row); // Add the row to the grid
 			}
 
 		}
+		/// <summary>
+		/// Sets the columndefinitions and rowdefinitions for the game over menu
+		/// </summary>
 		void SetupGameOver() {
 
+			// Add 4 rows and columns
 			for(int i = 0; i < 4; i++) {
 				grid.ColumnDefinitions.Add(new ColumnDefinition());
 				grid.RowDefinitions.Add(new RowDefinition());
 			}
+			// Add one more column
 			grid.ColumnDefinitions.Add(new ColumnDefinition());
 		
 		}
+		/// <summary>
+		/// Sets the columndefinitions and rowdefinitions for the online menu
+		/// </summary>
 		void SetupOnline() {
 
+			// Add 4 columns and rows
 			for(int i = 0; i < 4; i++) {
 				ColumnDefinition column = new ColumnDefinition();
 				RowDefinition row = new RowDefinition();
-				if (i > 0 && i < 3) {
-					column.Width = new GridLength(100);
-					row.Height = new GridLength(50);
+				if (i > 0 && i < 3) { // If it's not the first or last column/row
+					column.Width = new GridLength(100); // Set the width to 100
+					row.Height = new GridLength(50); // Set the height  to 50
 				}
-				grid.ColumnDefinitions.Add(column);
-				grid.RowDefinitions.Add(row);
+				grid.ColumnDefinitions.Add(column); // Add the column to the grid
+				grid.RowDefinitions.Add(row); // Add the row to the grid
 			}
 
 		}
+		/// <summary>
+		/// Sets the columndefinitions and rowdefinitions for the hosting menu
+		/// </summary>
 		void SetupHost() {
 
+			// Add 4 columns and rows
 			for (int i = 0; i < 4; i++) {
 				ColumnDefinition column = new ColumnDefinition();
 				RowDefinition row = new RowDefinition();
-				if (i == 1) {
-					column.Width = new GridLength(160);
-					row.Height = new GridLength(50);
-				} else if (i == 2) {
-					column.Width = new GridLength(70);
-					row.Height = new GridLength(50);
+				if (i == 1) { // If it's the second column/row
+					column.Width = new GridLength(160); // Set the width to 160
+					row.Height = new GridLength(50); // Set the height to 50
+				} else if (i == 2) { // If it's the third column/row
+					column.Width = new GridLength(70); // Set the width to 70
+					row.Height = new GridLength(50); // Set the height to 50
 				}
-				grid.ColumnDefinitions.Add(column);
-				grid.RowDefinitions.Add(row);
+				grid.ColumnDefinitions.Add(column); // Add the column to the grid
+				grid.RowDefinitions.Add(row); // Add the row to the grid
 			}
 
 		}
+		/// <summary>
+		/// Sets the columndefinitions and rowdefinitions for the join menu
+		/// </summary>
 		void SetupJoin() {
 
+			// Add 5 columns
 			for (int i = 0; i < 5; i++)
 				grid.ColumnDefinitions.Add(new ColumnDefinition());
-			grid.ColumnDefinitions[1].Width = new GridLength(125);
-			grid.ColumnDefinitions[2].Width = new GridLength(25);
-			grid.ColumnDefinitions[3].Width = new GridLength(75);
+			grid.ColumnDefinitions[1].Width = new GridLength(125); // Set the second columns width to 125
+			grid.ColumnDefinitions[2].Width = new GridLength(25); // Set the third columns width to 25
+			grid.ColumnDefinitions[3].Width = new GridLength(75); // Set the fourth columns width to 75
 
+			// Add 4 rows
 			for (int i = 0; i < 4; i++) {
 				RowDefinition row = new RowDefinition();
-				if (i > 0 && i < 3)
-					row.Height = new GridLength(50);
-				grid.RowDefinitions.Add(row);
+				if (i > 0 && i < 3) // If it's not the first or last row
+					row.Height = new GridLength(50); // Set the height to 50
+				grid.RowDefinitions.Add(row); // Add row to the grid
 			}
 
 		}
 
-		// GET METHODS FOR MAIN MENU CONTROLS (BUTTONS)
+		/// <summary>
+		/// Gets the ui elements / controls for the main menu
+		/// </summary>
+		/// <returns>List of UI Elements</returns>
 		List<UIElement> GetMainControls() {
+			// Declare list of ui controls to later return
 			List<UIElement> controls = new List<UIElement>();
 
-			TextBlock main_Text = new TextBlock();
-			main_Text.Text = "CHESS";
-			main_Text.FontSize = 40;
-			main_Text.TextAlignment = TextAlignment.Center;
-			main_Text.HorizontalAlignment = HorizontalAlignment.Center;
-			main_Text.VerticalAlignment = VerticalAlignment.Top;
-			Grid.SetColumn(main_Text, 0);
-			Grid.SetRow(main_Text, 1);
-			Grid.SetColumnSpan(main_Text, 3);
-			controls.Add(main_Text);
+			// Declare a new textblock
+			TextBlock main_Text = UIElementConstructors.TextBlockConstructor("CHESS", "main_tb", 40, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Top, 0, 1, 3);
+			controls.Add(main_Text); // Add to controls list
 
-			TextBlock author_Text = new TextBlock();
-			author_Text.Text = "By: Tim Rundström";
-			author_Text.FontSize = 15;
-			author_Text.TextAlignment = TextAlignment.Center;
-			author_Text.HorizontalAlignment = HorizontalAlignment.Center;
-			author_Text.VerticalAlignment = VerticalAlignment.Bottom;
-			Grid.SetColumn(author_Text, 0);
-			Grid.SetRow(author_Text, 1);
-			Grid.SetColumnSpan(author_Text, 3);
-			controls.Add(author_Text);
+			// Declare a new textblock
+			TextBlock author_Text = UIElementConstructors.TextBlockConstructor("By: Tim Rundström", "autor_tb", 15, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Bottom, 0, 1, 3);
+			controls.Add(author_Text); // Add to controls list
 
-			Button single_Btn = new Button();
-			single_Btn.Content = "Single";
-			single_Btn.FontSize = 20;
-			single_Btn.Margin = new Thickness(5);
-			single_Btn.Click += Play_Single_Btn_Click;
-			Grid.SetColumn(single_Btn, 1);
-			Grid.SetRow(single_Btn, 3);
-			controls.Add(single_Btn);
+			// Declare a new button
+			Button single_Btn = UIElementConstructors.ButtonContructor("Single", "single_btn", 20, 5, Play_Single_Btn_Click, 1, 3, 1);
+			controls.Add(single_Btn); // Add to controls list
 
-			Button online_Btn = new Button();
-			online_Btn.Content = "Online";
-			online_Btn.FontSize = 20;
-			online_Btn.Margin = new Thickness(5);
-			online_Btn.Click += Online_Btn_Click;
-			Grid.SetColumn(online_Btn, 1);
-			Grid.SetRow(online_Btn, 4);
-			controls.Add(online_Btn);
+			// Declare a new button
+			Button online_Btn = UIElementConstructors.ButtonContructor("Online", "online_btn", 20, 5, Online_Btn_Click, 1, 4, 1);
+			controls.Add(online_Btn); // Add to controls list
 
-			Button quit_Btn = new Button();
-			quit_Btn.Content = "Quit";
-			quit_Btn.FontSize = 20;
-			quit_Btn.Margin = new Thickness(5);
-			quit_Btn.Click += Quit_Btn_Click;
-			Grid.SetColumn(quit_Btn, 1);
-			Grid.SetRow(quit_Btn, 5);
-			controls.Add(quit_Btn);
+			// Declare a new button
+			Button quit_Btn = UIElementConstructors.ButtonContructor("Quit", "quit_btn", 20, 5, Quit_Btn_Click, 1, 5, 1);
+			controls.Add(quit_Btn); // Add to controls list
 
+			// Return controls
 			return controls;
 		}
+		
+		/// <summary>
+		/// Gets the ui elements / controls for the game
+		/// </summary>
+		/// <returns>List of UI Elements</returns>
 		List<UIElement> GetGameControls() {
+			// Declare list of ui controls to later return
 			List<UIElement> controls = new List<UIElement>();
 
-			TextBlock whitePointsTb = new TextBlock();
-			whitePointsTb.Name = "whitePointsTb";
-			whitePointsTb.TextAlignment = TextAlignment.Center;
-			whitePointsTb.HorizontalAlignment = HorizontalAlignment.Center;
-			whitePointsTb.VerticalAlignment = VerticalAlignment.Center;
-			Grid.SetColumn(whitePointsTb, 0);
-			Grid.SetRow(whitePointsTb, 0);
-			Grid.SetColumnSpan(whitePointsTb, 3);
-			whitePointsTb.FontSize = 15;
-			controls.Add(whitePointsTb);
+			// Declare a new textblock
+			TextBlock whitePointsTb = UIElementConstructors.TextBlockConstructor("", "whitePointsTb", 15, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Center, 0, 0, 3);
+			controls.Add(whitePointsTb); // Add to controls list
 
-			TextBlock blackPointsTb = new TextBlock();
-			blackPointsTb.Name = "blackPointsTb";
-			blackPointsTb.TextAlignment = TextAlignment.Center;
-			blackPointsTb.HorizontalAlignment = HorizontalAlignment.Center;
-			blackPointsTb.VerticalAlignment = VerticalAlignment.Center;
-			Grid.SetColumn(blackPointsTb, 7);
-			Grid.SetRow(blackPointsTb, 0);
-			Grid.SetColumnSpan(blackPointsTb, 3);
-			blackPointsTb.FontSize = 15;
-			controls.Add(blackPointsTb);
+			// Declare a new textblock
+			TextBlock blackPointsTb = UIElementConstructors.TextBlockConstructor("", "blackPointsTb", 15, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Center, 7, 0, 3);
+			controls.Add(blackPointsTb); // Add to controls list
 
-			TextBlock turnTb = new TextBlock();
-			turnTb.Name = "turnTb";
-			turnTb.TextAlignment = TextAlignment.Center;
-			turnTb.HorizontalAlignment = HorizontalAlignment.Center;
-			turnTb.VerticalAlignment = VerticalAlignment.Center;
-			Grid.SetColumn(turnTb, 3);
-			Grid.SetRow(turnTb, 0);
-			Grid.SetColumnSpan(turnTb, 4);
-			turnTb.FontSize = 20;
-			controls.Add(turnTb);
+			// Declare a new textblock
+			TextBlock turnTb = UIElementConstructors.TextBlockConstructor("", "turnTb", 20, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Center, 3, 0, 4);
+			controls.Add(turnTb); // Add to controls list
 
-			TextBlock colorTb = new TextBlock();
-			colorTb.Name = "colorTb";
-			colorTb.TextAlignment = TextAlignment.Center;
-			colorTb.HorizontalAlignment = HorizontalAlignment.Center;
-			colorTb.VerticalAlignment = VerticalAlignment.Bottom;
-			Grid.SetColumn(colorTb, 3);
-			Grid.SetRow(colorTb, 0);
-			Grid.SetColumnSpan(colorTb, 4);
-			colorTb.FontSize = 12;
-			controls.Add(colorTb);
+			// Declare a new textblock
+			TextBlock colorTb = UIElementConstructors.TextBlockConstructor("", "colorTb", 12, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Bottom, 3, 0, 4);
+			controls.Add(colorTb); // Add to controls list
 
+			// Create row numbers and column letters (8x8)
 			for (int i = 0; i < 8; i++) {
-				TextBlock horizontalTb = new TextBlock();
-				horizontalTb.Text = (i + 1).ToString();
-				horizontalTb.HorizontalAlignment = HorizontalAlignment.Right;
-				horizontalTb.VerticalAlignment = VerticalAlignment.Center;
-				Grid.SetColumn(horizontalTb, 0);
-				Grid.SetRow(horizontalTb, 8 - i);
-				controls.Add(horizontalTb);
+				// Declare a new horizontal textblock
+				TextBlock horizontalTb = UIElementConstructors.TextBlockConstructor((i + 1).ToString(), "horizontalTb", 12, TextAlignment.Center, HorizontalAlignment.Right, VerticalAlignment.Center, 0, 8-i, 1);
+				controls.Add(horizontalTb); // Add to controls list
 
-				TextBlock verticalTb = new TextBlock();
-				verticalTb.Text = ((char)(65 + i)).ToString();
-				verticalTb.HorizontalAlignment = HorizontalAlignment.Center;
-				verticalTb.VerticalAlignment = VerticalAlignment.Top;
-				Grid.SetColumn(verticalTb, i + 1);
-				Grid.SetRow(verticalTb, 9);
-				controls.Add(verticalTb);
+				// Declare a new vertical textblock
+				TextBlock verticalTb = UIElementConstructors.TextBlockConstructor(((char)(65 + i)).ToString(), "verticalTb", 12, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Top, i+1, 9, 1);
+				controls.Add(verticalTb); // Add to controls list
 			}
 
-			MainWindow.board.buttons.Clear();
+			MainWindow.board.buttons.Clear(); // Clear buttons list (clear up leftovers of last game)
+			// Bool for determining whether the button should have a white or black background
 			bool white = true;
+
+			// Create chessboard (8x8 grid of buttons)
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 8; j++) {
-					Position pos = new Position(j + 1, 8 - i);
-					Button btn = new Button();
-
-					Grid.SetColumn(btn, j + 1);
-					Grid.SetRow(btn, i + 1);
-
-					btn.Name = pos.btnName;
-					btn.FontSize = 40;
+					Position pos = new Position(j + 1, 8 - i); // Get its position
+					Button btn = UIElementConstructors.ButtonContructor("", pos.btnName, 40, 2, null, j + 1, i + 1, 1);
 
 					if (white)
-						btn.Background = new SolidColorBrush(Colors.White);
+						btn.Background = new SolidColorBrush(Colors.White); // Set background white
 					else
-						btn.Background = new SolidColorBrush(Colors.Gray);
-					white = white ? false : true;
+						btn.Background = new SolidColorBrush(Colors.Gray); // Set background black (gray)
 
-					btn.BorderBrush = new SolidColorBrush(Colors.Black);
-					btn.BorderThickness = new Thickness(3);
-					btn.Padding = new Thickness(0, -5, 0, 0);
-					btn.Margin = new Thickness(2);
-					btn.Style = btnStyle;
+					white = !white; // Switch so next button is another colour
+					btn.BorderBrush = new SolidColorBrush(Colors.Black); // Set a black border
+					btn.BorderThickness = new Thickness(3); // Set a border thickness of 3
+					btn.Padding = new Thickness(0, -5, 0, 0); // Give a negative padding on top (lift up text)
+					btn.Style = btnStyle; // Set the style
 
-					MainWindow.board.buttons.Add(pos.name, btn);
-					controls.Add(btn);
+					MainWindow.board.buttons.Add(pos.name, btn); // Add to buttons dictionary in board object
+					controls.Add(btn); // Add to controls
 				}
-				white = white ? false : true;
+				white = !white;  // Switch background colour order, so that the next rows colour is adjacent
 			}
 
-			SetGameButtonEvents();
-			return controls;
+			SetGameButtonEvents(); // Set all the events to the buttons
+			return controls; // return controls
 		}
+		
+		/// <summary>
+		/// Gets the ui elements / controls for the game over menu
+		/// </summary>
+		/// <returns>List of UI Elements</returns>
 		List<UIElement> GetGameOverControls() {
+			// Declare list of ui controls to later return
 			List<UIElement> controls = new List<UIElement>();
 
-			TextBlock tb = new TextBlock();
-			tb.FontSize = 50;
-			tb.HorizontalAlignment = HorizontalAlignment.Center;
-			tb.VerticalAlignment = VerticalAlignment.Center;
-			tb.TextAlignment = TextAlignment.Center;
-			Grid.SetColumn(tb, 1);
-			Grid.SetRow(tb, 1);
-			Grid.SetColumnSpan(tb, 3);
-			tb.Text = MainWindow.board.GetVictory();
-			controls.Add(tb);
+			// Declare a new textblock
+			TextBlock tb = UIElementConstructors.TextBlockConstructor(MainWindow.board.GetVictory(), "victoryTb", 50, TextAlignment.Center, HorizontalAlignment.Center, VerticalAlignment.Center, 1, 1, 3);
+			controls.Add(tb); // Add to controls
 
-			Button btn = new Button();
-			btn.FontSize = 20;
-			btn.Content = "Main menu";
-			btn.HorizontalAlignment = HorizontalAlignment.Center;
-			btn.VerticalAlignment = VerticalAlignment.Center;
-			Grid.SetColumn(btn, 2);
-			Grid.SetRow(btn, 2);
-			btn.Click += Menu_Btn_Click;
-			controls.Add(btn);
+			// Declare a new button
+			Button btn = UIElementConstructors.ButtonContructor("Main menu", "mainMenuBtn", 20, 0, Menu_Btn_Click, 2, 2, 1);
+			controls.Add(btn); // Add to controls
 
+			// return list of controls
 			return controls;
 		}
+		
+		/// <summary>
+		/// Gets the ui elements / controls for the online menu
+		/// </summary>
+		/// <returns>List of UI Elements</returns>
 		List<UIElement> GetOnlineControls() {
+			// Declare list of ui controls to later return
 			List<UIElement> controls = new List<UIElement>();
 
-			Button host_Btn = new Button();
-			host_Btn.Content = "Host";
-			host_Btn.FontSize = 20;
-			host_Btn.Margin = new Thickness(5);
-			host_Btn.Click += Host_Btn_Click;
-			Grid.SetColumn(host_Btn, 1);
-			Grid.SetRow(host_Btn, 1);
-			controls.Add(host_Btn);
+			// Declare a new button
+			Button host_Btn = UIElementConstructors.ButtonContructor("Host", "hostBtn", 20, 5, Host_Btn_Click, 1, 1, 1);
+			controls.Add(host_Btn); // Add to controls
 
-			Button join_Btn = new Button();
-			join_Btn.Content = "Join";
-			join_Btn.FontSize = 20;
-			join_Btn.Margin = new Thickness(5);
-			join_Btn.Click += Join_Btn_Click;
-			Grid.SetColumn(join_Btn, 2);
-			Grid.SetRow(join_Btn, 1);
-			controls.Add(join_Btn);
+			// Declare a new button
+			Button join_Btn = UIElementConstructors.ButtonContructor("Join", "join_Btn", 20, 5, Join_Btn_Click, 2, 1, 1);
+			controls.Add(join_Btn); // Add to controls
 
-			Button back_Btn = new Button();
-			back_Btn.Content = "Back";
-			back_Btn.FontSize = 20;
-			back_Btn.Margin = new Thickness(5);
-			back_Btn.Click += Menu_Btn_Click;
-			Grid.SetColumn(back_Btn, 1);
-			Grid.SetRow(back_Btn, 2);
-			back_Btn.SetValue(Grid.ColumnSpanProperty, 2);
-			controls.Add(back_Btn);
+			// Declare a new button
+			Button back_Btn = UIElementConstructors.ButtonContructor("Back", "back_Btn", 20, 5, Menu_Btn_Click, 1, 2, 2);
+			controls.Add(back_Btn); // Add to controls
 
-
+			// Return the list of controls
 			return controls;
 		}
+
+		/// <summary>
+		/// Gets the ui elements / controls for the host menu
+		/// </summary>
+		/// <returns>List of UI Elements</returns>
 		List<UIElement> GetHostControls() {
+			// Declare list of ui controls to later return
 			List<UIElement> controls = new List<UIElement>();
 
-			string ip = MainWindow.server.IP;
-			string port = MainWindow.server.port.ToString();
+			string ip = MainWindow.server.IP; // Get hosting ip
+			string port = MainWindow.server.port.ToString(); // Get hosting port
 
-			TextBlock address_Text = new TextBlock();
-			address_Text.Name = "address_TextBlock";
-			address_Text.Text = ip;
-			address_Text.FontSize = 20;
-			address_Text.Margin = new Thickness(5);
+			// Declare a new textblock
+			TextBlock address_tb = new TextBlock();
+			address_tb.Name = "address_TextBlock"; // Set name
+			address_tb.Text = ip; // Set text
+			address_tb.FontSize = 20; // Set fontsize
+			address_tb.Margin = new Thickness(5); // Give a margin of thickness 5
 
-			Border border1 = new Border();
-			border1.BorderBrush = new SolidColorBrush(Colors.Black);
-			border1.BorderThickness = new Thickness(1);
-			border1.Margin = new Thickness(5);
-			Grid.SetColumn(border1, 1);
-			Grid.SetRow(border1, 1);
-			border1.Child = address_Text;
-			controls.Add(border1);
+			// Declare a new border for address_Text
+			Border address_border = UIElementConstructors.BorderConstructor(Colors.Black, 1, 5, 1, 1);
+			address_border.Child = address_tb; // Add address_tb as child of border element
+			controls.Add(address_border); // Add border to controls;
 
-			TextBlock port_Text = new TextBlock();
-			address_Text.Name = "port_TextBlock";
-			port_Text.Text = port;
-			port_Text.FontSize = 20;
-			port_Text.Margin = new Thickness(5);
+			// Declare a new textblock
+			TextBlock port_tb = new TextBlock();
+			address_tb.Name = "port_TextBlock"; // Set name
+			port_tb.Text = port; // Set text
+			port_tb.FontSize = 20; // Set fontsize
+			port_tb.Margin = new Thickness(5); // Give a margin of thickness 5
 
-			Border border2 = new Border();
-			border2.BorderBrush = new SolidColorBrush(Colors.Black);
-			border2.BorderThickness = new Thickness(1);
-			border2.Margin = new Thickness(5);
-			Grid.SetColumn(border2, 2);
-			Grid.SetRow(border2, 1);
-			border2.Child = port_Text;
-			controls.Add(border2);
+			// Declare a new border for address_Text
+			Border port_border = UIElementConstructors.BorderConstructor(Colors.Black, 1, 5, 2, 1);
+			port_border.Child = port_tb; // Add port_tb as child of border element
+			controls.Add(port_border); // Add border to controls;
 
-			Button back_Btn = new Button();
-			back_Btn.Content = "Back";
-			back_Btn.FontSize = 20;
-			back_Btn.Margin = new Thickness(5);
-			back_Btn.Click += Online_Btn_Click;
-			Grid.SetColumn(back_Btn, 1);
-			Grid.SetRow(back_Btn, 2);
-			back_Btn.SetValue(Grid.ColumnSpanProperty, 2);
-			controls.Add(back_Btn);
+			// Declare a new button
+			Button back_Btn = UIElementConstructors.ButtonContructor("Back", "backBtn", 20, 5, Online_Btn_Click, 1, 2, 2);
+			controls.Add(back_Btn); // Add button to controls
 
+			// return list of controls
 			return controls;
 		}
+
+		/// <summary>
+		/// Gets the ui elements / controls for the join menu
+		/// </summary>
+		/// <returns>List of UI Elements</returns>
 		List<UIElement> GetJoinControls() {
+			// Declare list of ui controls to later return
 			List<UIElement> controls = new List<UIElement>();
 
-			TextBox address_Text = new TextBox();
-			address_Text.Name = "address_Textbox";
-			address_Text.FontSize = 20;
-			address_Text.Margin = new Thickness(5);
-			address_Text.Padding = new Thickness(0, 5, 0, 0);
-			Grid.SetColumn(address_Text, 1);
-			Grid.SetRow(address_Text, 1);
-			Grid.SetColumnSpan(address_Text, 2);
-			controls.Add(address_Text);
+			// Declare a new textbox
+			TextBox address_Text = UIElementConstructors.TextBoxConstructor("address_Text", 20, 5, 5, 1, 1, 2);
+			controls.Add(address_Text); // Add textbox to controls
 
-			TextBox port_Text = new TextBox();
-			port_Text.Name = "port_Textbox";
-			port_Text.FontSize = 20;
-			port_Text.Margin = new Thickness(5);
-			port_Text.Padding = new Thickness(0, 5, 0, 0);
-			Grid.SetColumn(port_Text, 3);
-			Grid.SetRow(port_Text, 1);
-			controls.Add(port_Text);
+			// Declare a new textbox
+			TextBox port_Text = UIElementConstructors.TextBoxConstructor("port_Text", 20, 5, 5, 3, 1, 1);
+			controls.Add(port_Text); // Add textbox of controls
 
-			Button connect_Btn = new Button();
-			connect_Btn.Content = "Connect";
-			connect_Btn.FontSize = 20;
-			connect_Btn.Margin = new Thickness(5);
-			connect_Btn.Click += Connect_Btn_Click;
-			Grid.SetColumn(connect_Btn, 1);
-			Grid.SetRow(connect_Btn, 2);
-			controls.Add(connect_Btn);
+			// Declare a new button
+			Button connect_Btn = UIElementConstructors.ButtonContructor("Connect", "connectBtn", 20, 5, Connect_Btn_Click, 1, 2, 1);
+			controls.Add(connect_Btn); // Add button to controls
 
-			Button back_Btn = new Button();
-			back_Btn.Content = "Back";
-			back_Btn.FontSize = 20;
-			back_Btn.Margin = new Thickness(5);
-			back_Btn.Click += Online_Btn_Click;
-			Grid.SetColumn(back_Btn, 2);
-			Grid.SetRow(back_Btn, 2);
-			Grid.SetColumnSpan(back_Btn, 2);
-			controls.Add(back_Btn);
+			// Declare a new button
+			Button back_Btn = UIElementConstructors.ButtonContructor("Back", "backBtn", 20, 5, Online_Btn_Click, 2, 2, 2);
+			controls.Add(back_Btn); // Add button to controls
 
 			return controls;
 		}
 		
-		// MAIN MENU BUTTONS
+		/// <summary>
+		/// Starts a solo game
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Play_Single_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Game);
 			MainWindow.board.SetupGame(false, true);
 		}
+		/// <summary>
+		/// Go to online menu
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Online);
 		}
+		/// <summary>
+		/// Quit application
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Quit_Btn_Click(object sender, RoutedEventArgs e) {
 			Application.Current.Shutdown();
 		}
 
-		// ONLINE MENU BUTTONS
+		/// <summary>
+		/// Go to host menu
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Host_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Host);
 			MainWindow.server.Start();
 		}
+		/// <summary>
+		/// Go to join menu
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Join_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Join);
 		}
+		/// <summary>
+		/// Go to main menu
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Menu_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Main);
 		}
 		
-		// JOIN MENU BUTTON	
+		/// <summary>
+		/// Connect to server
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Connect_Btn_Click(object sender, RoutedEventArgs e) {
 			string address = "";
 			string port = "";
 
+			// Find textboxes in grid.children
 			foreach (TextBox tb in FindVisualChildren<TextBox>(grid)) {
-				if (tb.Name == "address_Textbox")
-					address = tb.Text;
-				if (tb.Name == "port_Textbox")
-					port = tb.Text;
+				if (tb.Name == "address_Textbox") // If it is named "address_Textbox"
+					address = tb.Text; // Take its value as IP address
+				if (tb.Name == "port_Textbox") // If it is named "port_Textbox"
+					port = tb.Text; // Take its value as port
 			}
 
-			try {
-				MainWindow.client.Start(address, Convert.ToInt32(port));
-				SetGrid(GridType.Game);
-				MainWindow.board.SetupGame(true, false);
+			try { // Try to connect
+				MainWindow.client.Start(address, Convert.ToInt32(port)); // Start up client with address + port
+				SetGrid(GridType.Game); // Set grid to game
+				MainWindow.board.SetupGame(true, false); // Setup gameboard
 			} catch (Exception) {
+				// Couldn't connect to server, wrong ip and/or port
+				// Display messagebox
 				MessageBox.Show("Server not found.\nPlease make sure the IP adress and port is correct.");
 			}
 
 		}
 
-		// Find objects in grid.children
-		public IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject {
-			if (depObj != null) {
-				for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-					DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-					if (child != null && child is T) {
-						yield return (T)child;
-					}
+		/// <summary>
+		/// Get children of grid of the specific type T
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="grid"></param>
+		/// <returns></returns>
+		public IEnumerable<T> FindVisualChildren<T>(DependencyObject grid) where T : DependencyObject {
+			// For loop through all children in grid
+			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(grid); i++) {
+				// Get the child object
+				DependencyObject child = VisualTreeHelper.GetChild(grid, i);
+				// If the child exists and is inherited from DependencyObject
+				if (child != null && child is T) {
+					yield return (T)child; // Yield the result
+				}
 
-					foreach (T childOfChild in FindVisualChildren<T>(child)) {
-						yield return childOfChild;
-					}
+				// Go through the childs children (As in how address_Textbox is a child of address_Border)
+				foreach (T childOfChild in FindVisualChildren<T>(child)) {
+					yield return childOfChild; // Yield them
 				}
 			}
 		}
 
+		/// <summary>
+		/// Sets the click events of every button in the dictionary in the board object
+		/// </summary>
 		void SetGameButtonEvents() {
-
 			MainWindow.board.buttons[new Position(1, 8).name].Click += new RoutedEventHandler(Btn_A8_Click);
 			MainWindow.board.buttons[new Position(1, 7).name].Click += new RoutedEventHandler(Btn_A7_Click);
 			MainWindow.board.buttons[new Position(1, 6).name].Click += new RoutedEventHandler(Btn_A6_Click);
@@ -596,6 +585,9 @@ namespace Chess_online {
 			MainWindow.board.buttons[new Position(8, 1).name].Click += new RoutedEventHandler(Btn_H1_Click);
 		}
 
+		//
+		// Click events for all game buttons that redirect to ButtonPress() in the board object with it's position as argument
+		//
 		void Btn_A1_Click(object sender, RoutedEventArgs e) {
 			MainWindow.board.ButtonPress(new Position(1, 1));
 		}

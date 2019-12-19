@@ -18,72 +18,33 @@ namespace Chess_online {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-
-	/*
-	 * ------------------------------------------------
-	 * 
-	 * THREADS (ONLINE):
-	 * 1. MAIN THREAD (USER INPUTS AND CONTROLS)
-	 * 
-	 * 2. SERVER LISTEN (SERVER PART LISTENING)
-	 * 
-	 * 3. CLIENT LISTEN (CLIENT PART LISTENING)
-	 * 
-	 * THREADS (OFFLINE):
-	 * 1. MAIN THREAD (USER INPUTS AND CONTROLS)
-	 * 
-	 * ------------------------------------------------
-	 * 
-	 * ON HOST:
-	 * START SERVER AND A CLIENT (CONNECT CLIENT TO SELF / SERVER)
-	 * DISPLAY CURRENT ADDRESS AND PORT
-	 * WAIT FOR SECOND CLIENT TO CONNECT
-	 * START GAME
-	 * 
-	 * ON JOIN:
-	 * INPUT ADDRESS AND PORT
-	 * CONNECT TO SERVER
-	 * START GAME
-	 * 
-	 * ON SINGLE:
-	 * START GAME
-	 * 
-	 * ------------------------------------------------
-	 * 
-	 */
-
 	public partial class MainWindow : Window {
 
-		public static GridManager gridManager;
-		public static Chessboard board;
-		public static Server server;
-		public static Client client;
-		//public static NetworkConnection network;
+		// Static attributes
+		public static Grid gridObject;
+		public static GridManager gridManager; // Control and manage grid + ui elements
+		public static Chessboard board; // Game board
+		public static Server server; // Server for hosting online
+		public static Client client; // Client for joining online
 
 		public MainWindow() {
 			InitializeComponent();
-			AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+
+			gridObject = grid;
 
 			// Get the game button style
 			Style style = FindResource("ChessCell") as Style;
 
-			// Declare grid manager and set it to main menu grid.
+			// Declare attributes
 			gridManager = new GridManager(ref grid, style);
 			board = new Chessboard();
-			//network = new NetworkConnection();
 			server = new Server();
 			client = new Client();
 
-
-			// Set active grid and controls (main menu)
+			// Set grid and controls to main menu
 			gridManager.SetGrid(GridType.Main);
-
 		}
-		static void OnProcessExit(object sender, EventArgs e) {
-			//server.Stop();
-			//client.Stop();
-			//network.Stop();
-		}
+		
 
 	}
 }

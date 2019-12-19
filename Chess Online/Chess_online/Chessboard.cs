@@ -8,6 +8,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Chess_online {
+	/// <summary>
+	/// The game board.
+	/// 
+	/// Controls and hold all objects associated with the game
+	/// </summary>
 	public class Chessboard {
 
 		public Dictionary<string, Button> buttons;
@@ -53,7 +58,8 @@ namespace Chess_online {
 			UpdateBoard();
 		}
 		void SetTextBlocks() {
-			foreach (TextBlock tb in MainWindow.gridManager.FindVisualChildren<TextBlock>(MainWindow.gridManager.gridObj)) {
+			
+			foreach (TextBlock tb in MainWindow.gridManager.FindVisualChildren<TextBlock>(MainWindow.gridObject)) {
 				if (tb.Name == "whitePointsTb")
 					tb.Text = $"White Points: {whitePlayer.points}";
 				if (tb.Name == "blackPointsTb")

@@ -60,13 +60,13 @@
     <Compile Include="Client.cs" />
     <Compile Include="King.cs" />
     <Compile Include="Knight.cs" />
-    <Compile Include="NetworkConnection.cs" />
     <Compile Include="Pawn.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Queen.cs" />
     <Compile Include="Rook.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="UIElementConstructors.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
