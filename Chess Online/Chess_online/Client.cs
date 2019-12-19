@@ -29,35 +29,14 @@ namespace Chess_online {
 
 		}
 
-		public void Stop() {
-			try {
-				Send("END");
-				clientThread.Abort();
-				clientThread = new Thread(ClientCycle);
-				clientThread.IsBackground = true;
-				tcpClient.Close();
-			} catch (Exception) {
-			}
-		}
-
-
 		void ClientCycle() {
 			while (true) {
 				string message = Recieve();
-
-				if (message == "END")
-					break;
 
 				Application.Current.Dispatcher.Invoke(() => {
 					MainWindow.board.UpdateOnline(message);
 				});
 			}
-			Send("END");
-			Application.Current.Dispatcher.Invoke(() => {
-				MainWindow.gridManager.SetGrid(GridType.Main);
-			});
-			MessageBox.Show("Game ended prematurely.");
-			tcpClient.Close();
 		}
 		
 		public void Send(string message) {
@@ -65,7 +44,7 @@ namespace Chess_online {
 				NetworkStream tcpStream = tcpClient.GetStream();
 				byte[] bMessage = Encoding.ASCII.GetBytes(message);
 				tcpStream.Write(bMessage, 0, bMessage.Length);
-			} catch (Exception InvalidOperationException) {
+			} catch (Exception) {
 			}
 		}
 

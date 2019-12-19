@@ -58,6 +58,7 @@ namespace Chess_online {
 		public static Chessboard board;
 		public static Server server;
 		public static Client client;
+		//public static NetworkConnection network;
 
 		public MainWindow() {
 			InitializeComponent();
@@ -69,6 +70,7 @@ namespace Chess_online {
 			// Declare grid manager and set it to main menu grid.
 			gridManager = new GridManager(ref grid, style);
 			board = new Chessboard();
+			//network = new NetworkConnection();
 			server = new Server();
 			client = new Client();
 
@@ -78,8 +80,9 @@ namespace Chess_online {
 
 		}
 		static void OnProcessExit(object sender, EventArgs e) {
-			server.Stop();
-			client.Stop();
+			//server.Stop();
+			//client.Stop();
+			//network.Stop();
 		}
 
 	}

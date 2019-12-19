@@ -13,13 +13,20 @@ namespace Chess_online {
 	public class Server {
 
 		TcpListener tcpListener;
-		public readonly string IP = "127.0.0.1";
-		public readonly int port = 81;
+		public string IP = "127.0.0.1";
+		public int port = 8080;
 
 		Thread serverThread;
 		Socket client;
 
 		public Server() {
+			var host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (var ip in host.AddressList) {
+				if (ip.AddressFamily == AddressFamily.InterNetwork) {
+					IP = ip.ToString();
+				}
+			}
+
 			tcpListener = new TcpListener(IPAddress.Parse(IP), port);
 			serverThread = new Thread(ListenCycle);
 
@@ -29,35 +36,7 @@ namespace Chess_online {
 		public void Start() {
 			tcpListener.Start();
 			serverThread.Start();
-		}
-
-		public void Terminate() {
-			try {
-				tcpListener.Stop();
-				serverThread.Abort();
-				serverThread = new Thread(ListenCycle);
-				serverThread.IsBackground = true;
-				tcpListener.Stop();
-			} catch(Exception) {
-			}
-		}
-		public void Stop() {
-			try {
-				Send("END");
-				while (true) {
-					string endMessage = Recieve();
-					if (endMessage == "END") {
-						tcpListener.Stop();
-						break;
-					}
-				}
-				serverThread.Abort();
-				serverThread = new Thread(ListenCycle);
-				serverThread.IsBackground = true;
-				tcpListener.Stop();
-			} catch (Exception) {
-			}
-		}
+		}		
 
 		void ListenCycle() {
 			try {
@@ -71,21 +50,12 @@ namespace Chess_online {
 				string message;
 				while (true) {
 					message = Recieve();
-
-					if (message == "END" || message == "GAME OVER")
-						break;
-
+					
 					Application.Current.Dispatcher.Invoke(() => {
 						MainWindow.board.UpdateOnline(message);
 					});
 				}
-
-				Application.Current.Dispatcher.Invoke(() => {
-					MainWindow.gridManager.SetGrid(GridType.Main);
-				});
-				if (message == "END")
-					MessageBox.Show("Game ended prematurely.");
-				tcpListener.Stop();
+				
 
 			} catch (Exception) {
 			}

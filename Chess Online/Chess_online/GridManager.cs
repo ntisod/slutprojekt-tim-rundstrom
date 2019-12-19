@@ -465,8 +465,6 @@ namespace Chess_online {
 			MainWindow.board.SetupGame(false, true);
 		}
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
-			MainWindow.server.Terminate();
-			MainWindow.client.Stop();
 			SetGrid(GridType.Online);
 		}
 		void Quit_Btn_Click(object sender, RoutedEventArgs e) {
