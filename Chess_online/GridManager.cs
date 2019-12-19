@@ -126,6 +126,8 @@ namespace Chess_online {
 			for(int i = 0; i < 4; i++) {
 				grid.ColumnDefinitions.Add(new ColumnDefinition());
 				grid.RowDefinitions.Add(new RowDefinition());
+				if (i == 2)
+					grid.RowDefinitions[i].Height = new GridLength(50);
 			}
 			// Add one more column
 			grid.ColumnDefinitions.Add(new ColumnDefinition());

@@ -81,7 +81,7 @@ namespace Chess_online {
 				}
 			}
 		}
-		public void SetPieces() {
+		void SetPieces() {
 			whitePlayer.pieces.Clear();
 			blackPlayer.pieces.Clear();
 			//
