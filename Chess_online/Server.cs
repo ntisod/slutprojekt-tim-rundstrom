@@ -22,7 +22,9 @@ namespace Chess_online {
 
 		Thread serverThread; // Thread for listening in on the client in the background
 		Socket client; // Socket to which the client connects to
-		
+
+		bool running = false; // bool to determine if servercycle should accept a socket
+
 		/// <summary>
 		/// Constructor for the server object
 		/// Gets and sets IP address and declares objects
@@ -35,20 +37,42 @@ namespace Chess_online {
 					IP = ip.ToString(); // Set the attribute to the local IPv4 address
 				}
 			}
-
-			tcpListener = new TcpListener(IPAddress.Parse(IP), port); // Declare the listener on the local address
+			
 			serverThread = new Thread(ListenCycle); // Declare the background thread
 			serverThread.IsBackground = true; // Set the thread to background task
+			serverThread.Start(); // Start the listener thread
 		}
 
 		/// <summary>
 		/// Public method thats starts the host
-		/// Starts the TcpListener and server thread
+		/// sets the running bool to true, thus finds a socket in the serverthread
 		/// </summary>
 		public void Start() {
-			tcpListener.Start(); // Start listener
-			serverThread.Start(); // Start the listener thread
+			int portCounter = 0; // int to add to port in case its unavailable
+			while (true) {
+				try {
+					// Declare the listener on the local address
+					tcpListener = new TcpListener(IPAddress.Parse(IP), port + portCounter); // setup new listener
+					tcpListener.Start(); // try to start listener, exception if its unavailable
+					port = port + portCounter; // update port
+					break; // break out of loop, the connection has been set
+				} catch (Exception) { // In case its unavailable
+					portCounter++; // increase the port number, and go again through the loop
+				}
+			}
+			running = true; // Start listening for sockets
 		}		
+
+		/// <summary>
+		/// Publid method that stops the host
+		/// sets the running bool to false, thus not listening for a socket in the serverthread since the tcplistener is closed.
+		/// </summary>
+		public void Stop() {
+			running = false; // Stop listening for new sockets
+			if (tcpListener != null) // If its not on startup, aka tcpListener isn't null
+				tcpListener.Stop(); // Stop it
+			client = null; // set the client socket null aswell, better to make sure its closed
+		}
 
 		/// <summary>
 		/// Infinite cycle for the background server thread
@@ -56,26 +80,36 @@ namespace Chess_online {
 		/// Taking whatever the client sends and updates the board accordingly
 		/// </summary>
 		void ListenCycle() {
-			try {
-				client = tcpListener.AcceptSocket(); // Wait for a client to connect
+			while (true) {
 
-				// Launch the game inside the main thread
-				Application.Current.Dispatcher.Invoke(() => { // Gains access to the main thread
-					MainWindow.gridManager.SetGrid(GridType.Game); // Set the grid
-					MainWindow.board.SetupGame(true, true); // Setup the gameboard
-				});
+				if (running) { // Go through listening cycle
 
-				// The infinite listening loop
-				while (true) { 
-					string message = Recieve(); // Recieve a message from the client
-					
-					// Gain access to the main thread
-					Application.Current.Dispatcher.Invoke(() => {
-						MainWindow.board.UpdateOnline(message); // Update the board using the recieved message
-					});
+					try {
+						client = tcpListener.AcceptSocket(); // Wait for a client to connect
+															 // Launch the game inside the main thread
+						Application.Current.Dispatcher.Invoke(() => { // Gains access to the main thread
+							MainWindow.gridManager.SetGrid(GridType.Game); // Set the grid
+							MainWindow.board.SetupGame(true, true); // Setup the gameboard
+						});
+
+						// The infinite listening loop
+						while (true) {
+							string message = Recieve(); // Recieve a message from the clients
+							if (message == "")
+								break;
+
+							// Gain access to the main thread
+							Application.Current.Dispatcher.Invoke(() => {
+								MainWindow.board.UpdateOnline(message); // Update the board using the recieved message
+							});
+						}
+						running = false; // Stop listening
+
+					} catch (Exception) {
+					}
+				} else {
+					Thread.Sleep(1000); // Wait for 1s, less traffic
 				}
-				
-			} catch (Exception) {
 			}
 		}
 
@@ -94,8 +128,11 @@ namespace Chess_online {
 		string Recieve() {
 
 			Byte[] bRead = new Byte[256]; // Declare byte array bugger
-			int bReadSize = client.Receive(bRead); // Recieve the message into the buffer
-
+			int bReadSize = 0;
+			try {
+				bReadSize = client.Receive(bRead); // Recieve the message into the buffer
+			} catch (Exception) {
+			}
 			// Convert into a string
 			string read = "";
 			for (int i = 0; i < bReadSize; i++)

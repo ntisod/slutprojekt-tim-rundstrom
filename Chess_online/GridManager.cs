@@ -8,10 +8,12 @@ using System.Windows;
 using System.Windows.Media;
 
 namespace Chess_online {
+
 	/// <summary>
 	/// Public enum of different grids available, used for setting the grid
 	/// </summary>
 	public enum GridType { Main, Game, GameOver, Online, Host, Join}
+
 	/// <summary>
 	/// Managing object for the application grid.
 	/// Used for managing the grid and change the grid and ui elements with one single method
@@ -422,6 +424,7 @@ namespace Chess_online {
 		/// <param name="e"></param>
 		void Online_Btn_Click(object sender, RoutedEventArgs e) {
 			SetGrid(GridType.Online);
+			MainWindow.server.Stop();
 		}
 		/// <summary>
 		/// Quit application
@@ -438,8 +441,8 @@ namespace Chess_online {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		void Host_Btn_Click(object sender, RoutedEventArgs e) {
-			SetGrid(GridType.Host);
 			MainWindow.server.Start();
+			SetGrid(GridType.Host);
 		}
 		/// <summary>
 		/// Go to join menu
@@ -469,9 +472,9 @@ namespace Chess_online {
 
 			// Find textboxes in grid.children
 			foreach (TextBox tb in FindVisualChildren<TextBox>(grid)) {
-				if (tb.Name == "address_Textbox") // If it is named "address_Textbox"
+				if (tb.Name == "address_Text") // If it is named "address_Textbox"
 					address = tb.Text; // Take its value as IP address
-				if (tb.Name == "port_Textbox") // If it is named "port_Textbox"
+				if (tb.Name == "port_Text") // If it is named "port_Textbox"
 					port = tb.Text; // Take its value as port
 			}
 

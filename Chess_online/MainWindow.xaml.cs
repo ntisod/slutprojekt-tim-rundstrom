@@ -29,7 +29,7 @@ namespace Chess_online {
 
 		public MainWindow() {
 			InitializeComponent();
-
+			
 			gridObject = grid;
 
 			// Get the game button style

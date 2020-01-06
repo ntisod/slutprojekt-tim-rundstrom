@@ -16,18 +16,22 @@ namespace Chess_online {
 	/// </summary>
 	public class Client {
 
-		TcpClient tcpClient; // tcp object
+		public TcpClient tcpClient; // tcp object
 		Thread clientThread; // Thread for listening in on the server in the background
+
+		bool running; // bool to determine if clientcycle should listen to the server
 
 		/// <summary>
 		/// Constructor for client object
 		/// Declare values for objects
 		/// </summary>
 		public Client() {
+			// Declare objects
 			tcpClient = new TcpClient();
 			clientThread = new Thread(ClientCycle);
 
-			clientThread.IsBackground = true;
+			clientThread.IsBackground = true; // Set the client thread to a background thread, automatically closes
+			clientThread.Start(); // Start the thread
 		}
 
 		/// <summary>
@@ -38,8 +42,14 @@ namespace Chess_online {
 		public void Start(string hostname, int port) {
 		
 			tcpClient.Connect(hostname, port); // connect to the server
-			clientThread.Start(); // start the server cycle
+			running = true; // Start listening to messages from server
 
+		}
+
+		public void Stop() {
+			running = false; // don't listen for messages
+			tcpClient.Close(); // close tcpClient
+			tcpClient = new TcpClient(); // Refresh it with a new object, only way to reuse it
 		}
 
 		/// <summary>
@@ -50,13 +60,22 @@ namespace Chess_online {
 		void ClientCycle() {
 			// Infinite listening loop
 			while (true) {
-				string message = Recieve(); // Recieve message from the server
+				if (running) { // Listen for messages
+					while (true) {
+						string message = Recieve(); // Recieve message from the server
 
-				// Gain access into the main thread
-				Application.Current.Dispatcher.Invoke(() => {
-					// Update the board accordingly to the message from the server
-					MainWindow.board.UpdateOnline(message); 
-				});
+						if (message == "E")
+							break;
+							// Gain access into the main thread
+							Application.Current.Dispatcher.Invoke(() => {
+								// Update the board accordingly to the message from the server
+								MainWindow.board.UpdateOnline(message);
+							});
+						
+					}
+				} else {
+					Thread.Sleep(1000); // wait for 1s, less traffic
+				}
 			}
 		}
 
@@ -78,10 +97,15 @@ namespace Chess_online {
 		/// </summary>
 		/// <returns>message from server</returns>
 		public string Recieve() {
-			NetworkStream tcpStream = tcpClient.GetStream(); // Get TcpStream to recieve message
-
 			byte[] bRead = new byte[256]; // Declare a byte buffer
-			int bReadSize = tcpStream.Read(bRead, 0, bRead.Length); // Get a message using the buffer
+			int bReadSize = 0;
+
+			try {
+				NetworkStream tcpStream = tcpClient.GetStream(); // Get TcpStream to recieve message
+				bReadSize = tcpStream.Read(bRead, 0, bRead.Length); // Get a message using the buffer
+			} catch (Exception) {
+				return "E";
+			}
 
 			// Convert the message into a string
 			string read = "";

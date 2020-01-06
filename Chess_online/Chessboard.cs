@@ -15,31 +15,32 @@ namespace Chess_online {
 	/// </summary>
 	public class Chessboard {
 
-		public Dictionary<string, Button> buttons;
-		Button selectedButton;
-		Button opponentSelecedButton;
-		List<Position> blueButtons;
-		List<Chesspiece> allPieces;
+		public Dictionary<string, Button> buttons; // Dictionary of all buttons, keyed to their names
+		Button selectedButton; // The selected button, if there is one (green border)
+		Button opponentSelecedButton; // The opponents selected button, if there is one and is played online
+		List<Position> blueButtons; // List of all the available moves if a chesspiece is selected
+		List<Chesspiece> allPieces; // Full list of all pieces, for easier access
 
-		Player whitePlayer;
-		Player blackPlayer;
+		Player whitePlayer; // The white player (default serverside)
+		Player blackPlayer; // The black player
 
-		bool whitesTurn;
+		bool whitesTurn; // Bool to track whos turn it is, white or black
 
-		bool playOnline;
-		bool isLocal;
-		bool localWhite;
-
-		public bool LocalWhite { get => localWhite; }
-
+		bool playOnline; // Bool to check if the game is played online
+		bool isLocal; // if it is online, is this the server or client?
+		
+		/// <summary>
+		/// Constructor method for the class
+		/// </summary>
 		public Chessboard() {
+			// Declare objects
 			buttons = new Dictionary<string, Button>();
 			blueButtons = new List<Position>();
 			allPieces = new List<Chesspiece>();
 			whitePlayer = new Player(true);
 			blackPlayer = new Player(false);
 		}
-
+		
 		public void SetupGame(bool playOnline, bool isLocal) {
 			whitePlayer.points = 0;
 			blackPlayer.points = 0;
@@ -49,14 +50,10 @@ namespace Chess_online {
 			this.playOnline = playOnline;
 			this.isLocal = isLocal;
 
-			if (playOnline && isLocal)
-				localWhite = true;
-			else if (playOnline && !isLocal)
-				localWhite = false;
-			
 			SetPieces();
 			UpdateBoard();
 		}
+
 		void SetTextBlocks() {
 			
 			foreach (TextBlock tb in MainWindow.gridManager.FindVisualChildren<TextBlock>(MainWindow.gridObject)) {
@@ -73,7 +70,7 @@ namespace Chess_online {
 				}
 				if (tb.Name == "colorTb" && playOnline) {
 
-					if (localWhite)
+					if (isLocal)
 						tb.Text = "White";
 					else
 						tb.Text = "Black";
@@ -81,6 +78,7 @@ namespace Chess_online {
 				}
 			}
 		}
+
 		void SetPieces() {
 			whitePlayer.pieces.Clear();
 			blackPlayer.pieces.Clear();
@@ -143,7 +141,7 @@ namespace Chess_online {
 			// GET ACTION
 			string actionMessage = GetAction(position);
 			if (playOnline) {
-				if (whitesTurn == localWhite) {
+				if (whitesTurn == isLocal) {
 					if (isLocal)
 						MainWindow.server.Send(actionMessage);
 					else
@@ -214,13 +212,17 @@ namespace Chess_online {
 		public void UpdateOnline(string message) {
 
 			// Update according to message
-			string turn = message[0].ToString();
-			string action = message[2].ToString();
-			
-			int columnInt = Convert.ToChar(message[4]) - 64;
-			int row = Convert.ToInt32(message[5].ToString());
-			Position position = new Position(columnInt, row);
+			string turn = "";
+			string action = "";
+			Position position = new Position(0, 0);
+			if (message.Length >= 6) {
+				turn = message[0].ToString();
+				action = message[2].ToString();
 
+				int columnInt = Convert.ToChar(message[4]) - 64;
+				int row = Convert.ToInt32(message[5].ToString());
+				position = new Position(columnInt, row);
+			}
 
 			// Update list of all pieces
 			allPieces = whitePlayer.pieces.ToList();
@@ -228,17 +230,17 @@ namespace Chess_online {
 			
 			if (turn == "W" && whitesTurn || turn == "B" && !whitesTurn) {
 
-				if (action == "S" && whitesTurn == localWhite)
+				if (action == "S" && whitesTurn == isLocal)
 					Select(position);
-				else if (action == "S" && whitesTurn != localWhite)
+				else if (action == "S" && whitesTurn != isLocal)
 					opponentSelecedButton = buttons[position.name];
 				else if (action == "D") {
 					selectedButton = null;
 					opponentSelecedButton = null;
-				} else if (action == "M" && whitesTurn == localWhite) {
+				} else if (action == "M" && whitesTurn == isLocal) {
 					MoveTo(selectedButton, position);
 					whitesTurn = whitesTurn ? false : true;
-				} else if (action == "M" && whitesTurn != localWhite) {
+				} else if (action == "M" && whitesTurn != isLocal) {
 					MoveTo(opponentSelecedButton, position);
 					whitesTurn = whitesTurn ? false : true;
 				}
@@ -301,7 +303,10 @@ namespace Chess_online {
 
 			if (whitePlayer.hasLost || blackPlayer.hasLost) {
 				MainWindow.gridManager.SetGrid(GridType.GameOver);
-				MainWindow.client.Send("GAME OVER");
+				if (isLocal)
+					MainWindow.server.Stop();
+				else
+					MainWindow.client.Stop();
 			}
 		}
 
@@ -316,7 +321,7 @@ namespace Chess_online {
 			foreach (Chesspiece piece in allPieces) {
 				if (piece.Pos == position) {
 					if (playOnline) {
-						if (piece.IsWhite == localWhite)
+						if (piece.IsWhite == isLocal)
 							selectedButton = buttons[position.name];
 					} else {
 						if (piece.IsWhite == whitesTurn)
