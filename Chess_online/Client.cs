@@ -21,6 +21,8 @@ namespace Chess_online {
 
 		bool running; // bool to determine if clientcycle should listen to the server
 
+		public bool Running { get => running; } // Public getter for the running bool, to se if client is up and running
+
 		/// <summary>
 		/// Constructor for client object
 		/// Declare values for objects
@@ -60,22 +62,25 @@ namespace Chess_online {
 		void ClientCycle() {
 			// Infinite listening loop
 			while (true) {
-				if (running) { // Listen for messages
-					while (true) {
-						string message = Recieve(); // Recieve message from the server
+				while (running) {
+					string message = Recieve(); // Recieve message from the server
 
-						if (message == "E")
-							break;
-							// Gain access into the main thread
-							Application.Current.Dispatcher.Invoke(() => {
-								// Update the board accordingly to the message from the server
-								MainWindow.board.UpdateOnline(message);
-							});
-						
+					if (message == "GAME OVER") { // In case message from server is GAME OVER; they left early
+						Application.Current.Dispatcher.Invoke(() => {
+							MainWindow.gridManager.SetGrid(GridType.GameOver); // Set game over grid, you can't play against no one
+							MessageBox.Show("Game ended abruptly.\nOpponent unexpectedly left the game."); // Popup a small messagebox, explaining why it ended
+							Stop();
+						});
 					}
-				} else {
-					Thread.Sleep(1000); // wait for 1s, less traffic
+
+					// Gain access into the main thread
+					Application.Current.Dispatcher.Invoke(() => {
+							// Update the board accordingly to the message from the server
+							MainWindow.board.UpdateOnline(message);
+						});
+						
 				}
+				Thread.Sleep(500); // wait for .5s, less traffic
 			}
 		}
 
@@ -104,7 +109,6 @@ namespace Chess_online {
 				NetworkStream tcpStream = tcpClient.GetStream(); // Get TcpStream to recieve message
 				bReadSize = tcpStream.Read(bRead, 0, bRead.Length); // Get a message using the buffer
 			} catch (Exception) {
-				return "E";
 			}
 
 			// Convert the message into a string

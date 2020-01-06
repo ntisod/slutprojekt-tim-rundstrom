@@ -16,15 +16,15 @@ namespace Chess_online {
 		/// <summary>
 		/// Creates and return a button tailored to your arguments
 		/// </summary>
-		/// <param name="text"></param>
-		/// <param name="name"></param>
-		/// <param name="fontsize"></param>
-		/// <param name="margin"></param>
-		/// <param name="clickevent"></param>
-		/// <param name="column"></param>
-		/// <param name="row"></param>
-		/// <param name="columnspan"></param>
-		/// <returns></returns>
+		/// <param name="text">What text should the button have in its content</param>
+		/// <param name="name">What name should the button have</param>
+		/// <param name="fontsize">What fontsize should the text in its content be</param>
+		/// <param name="margin">What margins does the button have</param>
+		/// <param name="clickevent">Which method is its clickevent</param>
+		/// <param name="column">Which column does the button belong in</param>
+		/// <param name="row">Which row does the button belong in</param>
+		/// <param name="columnspan">How many columns does the button span over</param>
+		/// <returns>A button object tailored to the arguments</returns>
 		public static Button ButtonContructor(string text, string name, int fontsize, int margin, RoutedEventHandler clickevent, int column, int row, int columnspan) {
 			// Declare a new button
 			Button btn = new Button();
@@ -39,19 +39,20 @@ namespace Chess_online {
 			Grid.SetColumnSpan(btn, columnspan);
 			return btn;
 		}
+		
 		/// <summary>
 		/// Creates and return a textblock tailored to your arguments
 		/// </summary>
-		/// <param name="text"></param>
-		/// <param name="name"></param>
-		/// <param name="fontsize"></param>
-		/// <param name="textAlignment"></param>
-		/// <param name="horizontalAlignment"></param>
-		/// <param name="verticalAlignment"></param>
-		/// <param name="column"></param>
-		/// <param name="row"></param>
-		/// <param name="columnspan"></param>
-		/// <returns></returns>
+		/// <param name="text">What text should the textblock display</param>
+		/// <param name="name">What name does the textblock have</param>
+		/// <param name="fontsize">What fontsize does the text have</param>
+		/// <param name="textAlignment">What alignment does the text have</param>
+		/// <param name="horizontalAlignment">What horizontal alignment does the whole textblock have</param>
+		/// <param name="verticalAlignment">What vertical alignment does the whole textblock have</param>
+		/// <param name="column">Which column does the textblock belong in</param>
+		/// <param name="row">Which row does the textblock belong in</param>
+		/// <param name="columnspan">How many columns does the textblock span over</param>
+		/// <returns>A textblock object tailored to the arguments</returns>
 		public static TextBlock TextBlockConstructor(string text, string name, int fontsize, TextAlignment textAlignment, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, int column, int row, int columnspan) {
 
 			// Declare a new textblock
@@ -68,16 +69,16 @@ namespace Chess_online {
 			return tb;
 
 		}
-		
+
 		/// <summary>
 		/// Creates and return a border tailored to your arguments
 		/// </summary>
-		/// <param name="colour"></param>
-		/// <param name="thickness"></param>
-		/// <param name="margin"></param>
-		/// <param name="column"></param>
-		/// <param name="row"></param>
-		/// <returns></returns>
+		/// <param name="colour">What colour is the border</param>
+		/// <param name="thickness">How thick is the border</param>
+		/// <param name="margin">How much margin does the border have</param>
+		/// <param name="column">Which column does the border belong in</param>
+		/// <param name="row">Which row does the border belong in</param>
+		/// <returns>A border object tailored to the arguments</returns>
 		public static Border BorderConstructor(Color colour, int thickness, int margin, int column, int row) {
 			// Declare a new border for address_Text
 			Border border = new Border();
@@ -92,14 +93,14 @@ namespace Chess_online {
 		/// <summary>
 		/// Creates and return a textbox tailored to your arguments
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="fontsize"></param>
-		/// <param name="margin"></param>
-		/// <param name="topPadding"></param>
-		/// <param name="column"></param>
-		/// <param name="row"></param>
-		/// <param name="columnspan"></param>
-		/// <returns></returns>
+		/// <param name="name">What name does the textbox have</param>
+		/// <param name="fontsize">What fontsize should the text have</param>
+		/// <param name="margin">What margin does the textbox have</param>
+		/// <param name="topPadding">what top padding does the textbox have</param>
+		/// <param name="column">which column does the textbox belong in</param>
+		/// <param name="row">which row does the textbox belong in</param>
+		/// <param name="columnspan">how many columns does the textbox span over</param>
+		/// <returns>A textbox object tailored to the arguments</returns>
 		public static TextBox TextBoxConstructor(string name, int fontsize, int margin, int topPadding, int column, int row, int columnspan) {
 			// Declare a new textbox
 			TextBox tb = new TextBox();

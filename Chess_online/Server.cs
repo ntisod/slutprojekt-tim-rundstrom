@@ -25,6 +25,8 @@ namespace Chess_online {
 
 		bool running = false; // bool to determine if servercycle should accept a socket
 
+		public bool Running { get => running; } // Public getter for the running bool, to se if server is up and running
+
 		/// <summary>
 		/// Constructor for the server object
 		/// Gets and sets IP address and declares objects
@@ -93,22 +95,27 @@ namespace Chess_online {
 						});
 
 						// The infinite listening loop
-						while (true) {
+						while (running) {
 							string message = Recieve(); // Recieve a message from the clients
-							if (message == "")
-								break;
+
+							if (message == "GAME OVER") { // In case message from server is GAME OVER; they left early
+								Application.Current.Dispatcher.Invoke(() => {
+									MainWindow.gridManager.SetGrid(GridType.GameOver); // Set game over grid, you can't play against no one
+									MessageBox.Show("Game ended abruptly.\nOpponent unexpectedly left the game."); // Popup a small messagebox, explaining why it ended
+									Stop();
+								});
+							}
 
 							// Gain access to the main thread
 							Application.Current.Dispatcher.Invoke(() => {
 								MainWindow.board.UpdateOnline(message); // Update the board using the recieved message
 							});
 						}
-						running = false; // Stop listening
-
 					} catch (Exception) {
 					}
+
 				} else {
-					Thread.Sleep(1000); // Wait for 1s, less traffic
+					Thread.Sleep(500); // Wait for .5s, less traffic
 				}
 			}
 		}

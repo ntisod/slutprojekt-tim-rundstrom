@@ -21,7 +21,7 @@ namespace Chess_online {
 	public partial class MainWindow : Window {
 
 		// Static attributes
-		public static Grid gridObject;
+		public static Grid gridObject; // the grid, for reaching outside this class
 		public static GridManager gridManager; // Control and manage grid + ui elements
 		public static Chessboard board; // Game board
 		public static Server server; // Server for hosting online
@@ -29,8 +29,8 @@ namespace Chess_online {
 
 		public MainWindow() {
 			InitializeComponent();
-			
-			gridObject = grid;
+			AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit); // Add exit event
+			gridObject = grid; // Set the static grid object to the programmes grid
 
 			// Get the game button style
 			Style style = FindResource("ChessCell") as Style;
@@ -44,7 +44,21 @@ namespace Chess_online {
 			// Set grid and controls to main menu
 			gridManager.SetGrid(GridType.Main);
 		}
-		
+
+		/// <summary>
+		/// Method run when program closes, sends final "GAME OVER" messages if an online game is up and running
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		static void OnProcessExit(object sender, EventArgs e) {
+
+			if (server.Running) // if the server is up
+				server.Send("GAME OVER"); // Send a final message to client
+			if (client.Running) // if the client is up
+				client.Send("GAME OVER"); // Send a final message to server
+
+		}
+
 
 	}
 }
