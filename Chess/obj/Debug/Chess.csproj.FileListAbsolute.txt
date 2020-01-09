@@ -8,7 +8,7 @@ C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess_
 C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess_MarkupCompile.lref
 C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\MainWindow.baml
 C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess.g.resources
-C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Ches.Properties.Resources.resources
 C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess.csproj.GenerateResource.cache
 C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess.exe
 C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess.pdb
+C:\Users\timmi\Documents\GitHub\slutprojekt-tim-rundstrom\Chess\obj\Debug\Chess.Properties.Resources.resources

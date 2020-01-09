@@ -213,7 +213,7 @@ namespace Chess {
 			controls.Add(author_Text); // Add to controls list
 
 			// Declare a new button
-			Button single_Btn = UIElementConstructors.ButtonContructor("Single", "single_btn", 20, 5, Play_Single_Btn_Click, 1, 3, 1);
+			Button single_Btn = UIElementConstructors.ButtonContructor("Play", "single_btn", 20, 5, Play_Single_Btn_Click, 1, 3, 1);
 			controls.Add(single_Btn); // Add to controls list
 
 			// Declare a new button
@@ -361,6 +361,10 @@ namespace Chess {
 			address_border.Child = address_tb; // Add address_tb as child of border element
 			controls.Add(address_border); // Add border to controls;
 
+			// Address info textblock, for easier understanding what is what
+			TextBlock address_info = UIElementConstructors.TextBlockConstructor("IPv4 Address", "address_info", 15, TextAlignment.Left, HorizontalAlignment.Center, VerticalAlignment.Bottom, 1, 0, 1);
+			controls.Add(address_info);
+
 			// Declare a new textblock
 			TextBlock port_tb = new TextBlock();
 			address_tb.Name = "port_TextBlock"; // Set name
@@ -372,6 +376,16 @@ namespace Chess {
 			Border port_border = UIElementConstructors.BorderConstructor(Colors.Black, 1, 5, 2, 1);
 			port_border.Child = port_tb; // Add port_tb as child of border element
 			controls.Add(port_border); // Add border to controls;
+
+			// Port info textblock, for easier understanding on what is what
+			TextBlock port_info = UIElementConstructors.TextBlockConstructor("Port", "port_info", 15, TextAlignment.Left, HorizontalAlignment.Center, VerticalAlignment.Bottom, 2, 0, 1);
+			controls.Add(port_info);
+
+			// Info messagebox button
+			Button info_Btn = UIElementConstructors.ButtonContructor("?", "infoBtn", 20, 5, Info_Btn_Click, 3, 1, 1);
+			info_Btn.Width = 40;
+			info_Btn.HorizontalAlignment = HorizontalAlignment.Left;
+			controls.Add(info_Btn);
 
 			// Declare a new button
 			Button back_Btn = UIElementConstructors.ButtonContructor("Back", "backBtn", 20, 5, Online_Btn_Click, 1, 2, 2);
@@ -393,13 +407,27 @@ namespace Chess {
 			TextBox address_Text = UIElementConstructors.TextBoxConstructor("address_Text", 20, 5, 5, 1, 1, 2);
 			controls.Add(address_Text); // Add textbox to controls
 
+			// Address info textblock, for easier understanding what is what
+			TextBlock address_info = UIElementConstructors.TextBlockConstructor("IPv4 Address", "address_info", 15, TextAlignment.Left, HorizontalAlignment.Center, VerticalAlignment.Bottom, 1, 0, 1);
+			controls.Add(address_info);
+
 			// Declare a new textbox
 			TextBox port_Text = UIElementConstructors.TextBoxConstructor("port_Text", 20, 5, 5, 3, 1, 1);
 			controls.Add(port_Text); // Add textbox of controls
 
+			// Port info textblock, for easier understanding on what is what
+			TextBlock port_info = UIElementConstructors.TextBlockConstructor("Port", "port_info", 15, TextAlignment.Left, HorizontalAlignment.Center, VerticalAlignment.Bottom, 3, 0, 1);
+			controls.Add(port_info);
+
 			// Declare a new button
 			Button connect_Btn = UIElementConstructors.ButtonContructor("Connect", "connectBtn", 20, 5, Connect_Btn_Click, 1, 2, 1);
 			controls.Add(connect_Btn); // Add button to controls
+
+			// Info messagebox button
+			Button info_Btn = UIElementConstructors.ButtonContructor("?", "infoBtn", 20, 5, Info_Btn_Click, 4, 1, 1);
+			info_Btn.Width = 40;
+			info_Btn.HorizontalAlignment = HorizontalAlignment.Left;
+			controls.Add(info_Btn);
 
 			// Declare a new button
 			Button back_Btn = UIElementConstructors.ButtonContructor("Back", "backBtn", 20, 5, Online_Btn_Click, 2, 2, 2);
@@ -426,6 +454,18 @@ namespace Chess {
 			SetGrid(GridType.Online);
 			MainWindow.server.Stop();
 		}
+		
+		/// <summary>
+		/// Display a messagebox containing information and short instructions to starting an online game
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void Info_Btn_Click(object sender, RoutedEventArgs e) {
+			string message = "Starting an online game:\nIf you are hosting:\nUsing the IPv4 address and port displayed on your screen, wait for an opponent to connect to you and a game will start automatically.\n\nIf you are joining:\nUsing the IPv4 address and port provided by the host, input these and press connect to join and start the game.\n\nOBS\nYou need to be connected to the same local network as your opponent.";
+   
+			MessageBox.Show(message, "Play Online");
+		}
+		
 		/// <summary>
 		/// Quit application
 		/// </summary>

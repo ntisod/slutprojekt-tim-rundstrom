@@ -126,7 +126,11 @@ namespace Chess {
 		/// <param name="message"></param>
 		public void Send(string message) {
 			Byte[] bSend = Encoding.ASCII.GetBytes(message); // Encode the string message to a byte array
-			client.Send(bSend); // send the byte array to the client
+			try {
+				client.Send(bSend); // send the byte array to the client
+			} catch (NullReferenceException) {
+				// Ignore error, happens when program is quit while in the online menu since the server is running, but no client has yet connected
+			}
 		}
 		/// <summary>
 		/// Recieve a message from the client
